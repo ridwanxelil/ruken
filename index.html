@@ -337,8 +337,18 @@
     return k === "index.html" || k === "index.htm" || k === "404.html" || k === currentFile;
   }
 
-  // 0) GitHub Pages: dosyaları GitHub API'den otomatik listele (kurulum gerekmez)
-  async function githubTara() {
+  // Zaman aşımlı fetch: ağ takılırsa sayfa sonsuza dek "Yükleniyor" demesin
+  function zamanliFetch(url, opts, ms) {
+    const c = new AbortController();
+    const t = setTimeout(() => c.abort(), ms || 8000);
+    return fetch(url, Object.assign({}, opts || {}, { signal: c.signal }))
+      .finally(() => clearTimeout(t));
+  }
+
+  const hatalar = [];
+
+  // 0) GitHub Pages: owner / repo / klasörü adresten bul
+  function githubBilgi() {
     let owner, repo, yol = "";
     if (GITHUB) {
       ({ owner, repo } = GITHUB);
@@ -352,22 +362,58 @@
     } else {
       throw new Error("GitHub adresi değil");
     }
+    return { owner, repo, yol };
+  }
 
+  function listeyeCevir(adlar) {
+    return [...new Set(adlar)]
+      .filter((ad) => /\.html?$/i.test(ad) && !haric(ad))
+      .map((ad) => ({ dosya: ad, baslik: guzelAd(ad) }));
+  }
+
+  // 0a) GitHub API
+  async function githubApiTara() {
+    const { owner, repo, yol } = githubBilgi();
     const api = "https://api.github.com/repos/" + owner + "/" + repo + "/contents/" +
       yol.split("/").filter(Boolean).map(encodeURIComponent).join("/");
-    const res = await fetch(api, { headers: { Accept: "application/vnd.github+json" } });
-    if (!res.ok) throw new Error("GitHub API hatası: " + res.status);
+    const res = await zamanliFetch(api, { headers: { Accept: "application/vnd.github+json" } }, 8000);
+    if (!res.ok) throw new Error("GitHub API " + res.status);
     const veri = await res.json();
+    return listeyeCevir(veri.filter((f) => f.type === "file").map((f) => f.name));
+  }
 
-    return veri
-      .filter((f) => f.type === "file" && /\.html?$/i.test(f.name) && !haric(f.name))
-      .map((f) => ({ dosya: f.name, baslik: guzelAd(f.name) }));
+  // 0b) Yedek: jsDelivr dosya listesi (API sınırı yok)
+  async function jsdelivrTara() {
+    const { owner, repo, yol } = githubBilgi();
+    const onek = "/" + (yol ? yol + "/" : "");
+    for (const dal of ["main", "master"]) {
+      try {
+        const url = "https://data.jsdelivr.com/v1/packages/gh/" + owner + "/" + repo + "@" + dal + "?structure=flat";
+        const res = await zamanliFetch(url, {}, 8000);
+        if (!res.ok) continue;
+        const veri = await res.json();
+        const adlar = (veri.files || [])
+          .map((f) => f.name)
+          .filter((n) => n.startsWith(onek) && !n.slice(onek.length).includes("/"))
+          .map((n) => n.slice(onek.length));
+        if (adlar.length) return listeyeCevir(adlar);
+      } catch (e) { /* sıradaki dalı dene */ }
+    }
+    throw new Error("jsDelivr listesi alınamadı");
+  }
+
+  async function githubTara() {
+    try { return await githubApiTara(); }
+    catch (e) { hatalar.push(e.message || String(e)); }
+    try { return await jsdelivrTara(); }
+    catch (e) { hatalar.push(e.message || String(e)); }
+    return [];
   }
 
   // 1) Sunucu klasör listesini okuyarak HTML dosyalarını bul
   async function klasoruTara() {
     const base = new URL("./", location.href);
-    const res = await fetch(base.href, { cache: "no-store" });
+    const res = await zamanliFetch(base.href, { cache: "no-store" }, 5000);
     if (!res.ok) throw new Error("Klasör okunamadı");
     const metin = await res.text();
     const doc = new DOMParser().parseFromString(metin, "text/html");
@@ -395,7 +441,7 @@
     await Promise.all(
       liste.map(async (item) => {
         try {
-          const r = await fetch(encodeURI(item.dosya), { cache: "no-store" });
+          const r = await zamanliFetch(encodeURI(item.dosya), { cache: "no-store" }, 6000);
           if (!r.ok) return;
           const d = new DOMParser().parseFromString(await r.text(), "text/html");
           const t = d.querySelector("title");
@@ -448,7 +494,8 @@
     });
 
     if (tumDosyalar.length === 0) {
-      emptyEl.innerHTML = "😕<br>Hiç dosya bulunamadı.<br><small>Sayfayı yenile ya da öğretmeninden yardım iste.</small>";
+      emptyEl.innerHTML = "😕<br>Hiç dosya bulunamadı.<br><small>Sayfayı yenile ya da öğretmeninden yardım iste.</small>" +
+        (hatalar.length ? "<br><small style=\"opacity:.7\">(" + hatalar.join(" · ") + ")</small>" : "");
     } else {
       emptyEl.innerHTML = "🔎<br>Aramana uyan ders yok.";
     }
@@ -538,7 +585,7 @@
     }
 
     if (liste.length === 0) {
-      try { liste = await githubTara(); } catch (e) { liste = []; }
+      liste = await githubTara();
     }
     if (liste.length === 0) {
       liste = DOSYALAR.filter((d) => !haric(d.dosya)).map((d) => ({ ...d }));
