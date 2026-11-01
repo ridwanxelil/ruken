@@ -1,1 +1,514 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Derslerim</title>
+  <style>
+    :root {
+      --bg: #fff8ec;
+      --panel: #ffffff;
+      --ink: #2b2d42;
+      --muted: #8d8fa3;
+      --primary: #ff7a59;
+      --primary-dark: #e65f3d;
+      --accent: #4cc9f0;
+      --line: #f0e4d0;
+      --sidebar-w: 300px;
+      --topbar-h: 56px;
+    }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .app {
+      display: flex;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    /* ===== SOL MENÜ ===== */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--panel);
+      border-right: 2px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      z-index: 30;
+      transition: transform .3s ease;
+    }
+
+    .brand {
+      padding: 20px 18px 14px;
+      background: linear-gradient(135deg, var(--primary), #ffb347);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 46px; height: 46px;
+      background: rgba(255,255,255,.25);
+      border-radius: 14px;
+      display: grid; place-items: center;
+      font-size: 26px;
+    }
+    .brand h1 { font-size: 20px; line-height: 1.1; }
+    .brand p { font-size: 13px; opacity: .9; margin-top: 2px; }
+
+    .search-wrap { padding: 14px 14px 6px; }
+    .search {
+      width: 100%;
+      padding: 11px 14px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+      background: #fffdf8;
+      color: var(--ink);
+    }
+    .search:focus { border-color: var(--accent); }
+
+    .pick-btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 11px 14px;
+      border: none;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pick-btn:active { filter: brightness(.92); }
+    .pick-btn { display: none; }                 /* yalnızca otomatik liste bulunamazsa görünür */
+    .pick-btn.show { display: block; }
+
+    .count {
+      padding: 6px 18px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .menu {
+      list-style: none;
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 10px 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .menu li { margin-bottom: 6px; }
+    .menu a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 600;
+      border: 2px solid transparent;
+      transition: background .15s, transform .15s;
+    }
+    .menu a:hover { background: #fff1dc; transform: translateX(3px); }
+    .menu a.active {
+      background: #ffe9e2;
+      border-color: var(--primary);
+      color: var(--primary-dark);
+    }
+    .menu .dot {
+      width: 36px; height: 36px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      display: grid; place-items: center;
+      font-size: 18px;
+      color: #fff;
+    }
+    .menu .label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .empty {
+      display: none;
+      text-align: center;
+      padding: 30px 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .empty.show { display: block; }
+
+    /* ===== ANA ALAN ===== */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: var(--topbar-h);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      background: var(--panel);
+      border-bottom: 2px solid var(--line);
+    }
+    .burger {
+      display: none;
+      width: 42px; height: 42px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .burger:active { background: var(--primary-dark); }
+    .current-title {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .open-new {
+      display: none;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: #ffe9e2;
+      padding: 8px 12px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    .open-new.show { display: inline-block; }
+
+    .viewer { position: relative; flex: 1; background: var(--bg); }
+
+    .viewer iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border: none;
+      background: #fff;
+      display: none;
+    }
+    .viewer iframe.show { display: block; }
+
+    .welcome {
+      position: absolute; inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+    }
+    .welcome.hide { display: none; }
+    .welcome .big { font-size: 72px; margin-bottom: 10px; }
+    .welcome h2 { font-size: 26px; margin-bottom: 8px; }
+    .welcome p { color: var(--muted); font-size: 16px; max-width: 360px; }
+
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(43,45,66,.45);
+      z-index: 20;
+    }
+
+    /* ===== MOBİL ===== */
+    @media (max-width: 800px) {
+      .sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: min(86vw, 330px);
+        transform: translateX(-100%);
+        box-shadow: 6px 0 24px rgba(0,0,0,.2);
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .overlay.show { display: block; }
+      .burger { display: grid; place-items: center; }
+      .welcome h2 { font-size: 22px; }
+      .welcome .big { font-size: 60px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-icon">📚</div>
+        <div>
+          <h1>Derslerim</h1>
+          <p>5. Sınıf</p>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <input class="search" id="search" type="search" placeholder="🔍 Ders ara..." autocomplete="off">
+        <button class="pick-btn" id="pickBtn" type="button">📂 Dosyaları yenile / seç</button>
+        <input type="file" id="folderInput" webkitdirectory multiple hidden>
+      </div>
+
+      <div class="count" id="count">Yükleniyor...</div>
+
+      <ul class="menu" id="menu"></ul>
+
+      <div class="empty" id="empty"></div>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="burger" id="burger" aria-label="Menüyü aç">☰</button>
+        <div class="current-title" id="currentTitle">Bir ders seç</div>
+        <a class="open-new" id="openNew" href="#" target="_blank" rel="noopener">Yeni sekmede aç ↗</a>
+      </header>
+
+      <section class="viewer">
+        <div class="welcome" id="welcome">
+          <div class="big">👋</div>
+          <h2>Hoş geldin!</h2>
+          <p>Soldaki menüden bir ders seç, burada açılsın.</p>
+        </div>
+        <iframe id="frame" title="Ders içeriği"></iframe>
+      </section>
+    </main>
+
+  </div>
+
+<script>
+  // GitHub Pages (kullanici.github.io/depo/) adresinde owner/repo/klasör otomatik bulunur.
+  // Özel alan adı (kendi-siteniz.com) kullanıyorsanız şunu doldurun:
+  //   const GITHUB = { owner: "kullanici", repo: "depo", path: "" };
+  const GITHUB = null;
+
+  // Hiçbir otomatik yöntem çalışmazsa bu liste kullanılır.
+  // Yeni dosya eklemek için bir satır ekleyin: { dosya: "ad.html", baslik: "Görünecek Ad" }
+  const DOSYALAR = [
+    // { dosya: "konu-1.html", baslik: "Konu 1" },
+    // { dosya: "konu-2.html", baslik: "Konu 2" },
+  ];
+
+  const ICONS  = ["📘", "🔢", "🔬", "🌍", "🎨", "🎵", "🧩", "✏️", "🚀", "🌱"];
+  const COLORS = ["#4cc9f0", "#ff7a59", "#7bd389", "#b388ff", "#ffb347", "#f06292"];
+
+  const $ = (id) => document.getElementById(id);
+  const menu = $("menu"), frame = $("frame"), welcome = $("welcome");
+  const sidebar = $("sidebar"), overlay = $("overlay"), burger = $("burger");
+  const currentTitle = $("currentTitle"), openNew = $("openNew");
+  const countEl = $("count"), emptyEl = $("empty"), searchEl = $("search");
+
+  let tumDosyalar = [];
+  let aktifDosya = null;
+
+  const currentFile = (decodeURIComponent(location.pathname.split("/").pop()) || "index.html").toLowerCase();
+
+  function guzelAd(dosya) {
+    return dosya.replace(/\.html?$/i, "").replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim();
+  }
+
+  function haric(ad) {
+    const k = ad.toLowerCase();
+    return k === "index.html" || k === "index.htm" || k === "404.html" || k === currentFile;
+  }
+
+  // 0) GitHub Pages: dosyaları GitHub API'den otomatik listele (kurulum gerekmez)
+  async function githubTara() {
+    let owner, repo, yol = "";
+    if (GITHUB) {
+      ({ owner, repo } = GITHUB);
+      yol = (GITHUB.path || "").replace(/^\/|\/$/g, "");
+    } else if (location.hostname.endsWith(".github.io")) {
+      owner = location.hostname.split(".")[0];
+      const seg = location.pathname.split("/").filter(Boolean).map(decodeURIComponent);
+      if (seg.length && /\.html?$/i.test(seg[seg.length - 1])) seg.pop();   // index.html'i at
+      if (seg.length === 0) repo = owner + ".github.io";                     // kullanıcı sitesi
+      else { repo = seg[0]; yol = seg.slice(1).join("/"); }
+    } else {
+      throw new Error("GitHub adresi değil");
+    }
+
+    const api = "https://api.github.com/repos/" + owner + "/" + repo + "/contents/" +
+      yol.split("/").filter(Boolean).map(encodeURIComponent).join("/");
+    const res = await fetch(api, { headers: { Accept: "application/vnd.github+json" } });
+    if (!res.ok) throw new Error("GitHub API hatası: " + res.status);
+    const veri = await res.json();
+
+    return veri
+      .filter((f) => f.type === "file" && /\.html?$/i.test(f.name) && !haric(f.name))
+      .map((f) => ({ dosya: f.name, baslik: guzelAd(f.name) }));
+  }
+
+  // 1) Sunucu klasör listesini okuyarak HTML dosyalarını bul
+  async function klasoruTara() {
+    const base = new URL("./", location.href);
+    const res = await fetch(base.href, { cache: "no-store" });
+    if (!res.ok) throw new Error("Klasör okunamadı");
+    const metin = await res.text();
+    const doc = new DOMParser().parseFromString(metin, "text/html");
+    const bulunan = new Set();
+
+    doc.querySelectorAll("a[href]").forEach((a) => {
+      try {
+        const u = new URL(a.getAttribute("href"), base);
+        if (u.origin !== base.origin) return;
+        if (!u.pathname.startsWith(base.pathname)) return;
+        const rest = u.pathname.slice(base.pathname.length);
+        if (!rest || rest.includes("/")) return;
+        if (!/\.html?$/i.test(rest)) return;
+        const ad = decodeURIComponent(rest);
+        if (haric(ad)) return;
+        bulunan.add(ad);
+      } catch (e) { /* geçersiz bağlantıyı atla */ }
+    });
+
+    return [...bulunan].map((ad) => ({ dosya: ad, baslik: guzelAd(ad) }));
+  }
+
+  // 2) Her dosyanın <title> etiketinden başlığı çek
+  async function basliklariOku(liste) {
+    await Promise.all(
+      liste.map(async (item) => {
+        try {
+          const r = await fetch(encodeURI(item.dosya), { cache: "no-store" });
+          if (!r.ok) return;
+          const d = new DOMParser().parseFromString(await r.text(), "text/html");
+          const t = d.querySelector("title");
+          if (t && t.textContent.trim()) item.baslik = t.textContent.trim();
+        } catch (e) { /* başlık okunamazsa dosya adı kalır */ }
+      })
+    );
+    return liste;
+  }
+
+  function sirala(liste) {
+    return liste.sort((a, b) =>
+      a.dosya.localeCompare(b.dosya, "tr", { numeric: true, sensitivity: "base" })
+    );
+  }
+
+  // 3) Menüyü çiz (arama filtresi dahil)
+  function menuCiz() {
+    const q = searchEl.value.trim().toLocaleLowerCase("tr");
+    const gorunen = tumDosyalar.filter((d) =>
+      !q || d.baslik.toLocaleLowerCase("tr").includes(q) || d.dosya.toLocaleLowerCase("tr").includes(q)
+    );
+
+    menu.innerHTML = "";
+    gorunen.forEach((item) => {
+      const i = tumDosyalar.indexOf(item);
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = encodeURI(item.dosya);
+      a.dataset.dosya = item.dosya;
+      if (item.dosya === aktifDosya) a.classList.add("active");
+
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.textContent = ICONS[i % ICONS.length];
+      dot.style.background = COLORS[i % COLORS.length];
+
+      const label = document.createElement("span");
+      label.className = "label";
+      label.textContent = item.baslik;
+
+      a.append(dot, label);
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        dosyaAc(item);
+      });
+
+      li.appendChild(a);
+      menu.appendChild(li);
+    });
+
+    if (tumDosyalar.length === 0) {
+      emptyEl.innerHTML = "😕<br>Hiç dosya bulunamadı.<br><small>Sayfayı yenile ya da öğretmeninden yardım iste.</small>";
+    } else {
+      emptyEl.innerHTML = "🔎<br>Aramana uyan ders yok.";
+    }
+    emptyEl.classList.toggle("show", gorunen.length === 0);
+    $("pickBtn").classList.toggle("show", tumDosyalar.length === 0);
+
+    countEl.textContent = q
+      ? gorunen.length + " / " + tumDosyalar.length + " dosya"
+      : tumDosyalar.length + " dosya";
+  }
+
+  // 4) Seçilen dosyayı sağ tarafta aç
+  function dosyaAc(item) {
+    const url = encodeURI(item.dosya);
+    aktifDosya = item.dosya;
+    frame.src = url;
+    frame.classList.add("show");
+    welcome.classList.add("hide");
+    currentTitle.textContent = item.baslik;
+    openNew.href = url;
+    openNew.classList.add("show");
+    document.title = item.baslik + " · Derslerim";
+
+    menu.querySelectorAll("a").forEach((a) =>
+      a.classList.toggle("active", a.dataset.dosya === item.dosya)
+    );
+
+    try { history.replaceState(null, "", "#" + encodeURIComponent(item.dosya)); } catch (e) {}
+    menuKapat();
+  }
+
+  // 5) Mobil menü
+  function menuAc()    { sidebar.classList.add("open");    overlay.classList.add("show"); }
+  function menuKapat() { sidebar.classList.remove("open"); overlay.classList.remove("show"); }
+
+  burger.addEventListener("click", () =>
+    sidebar.classList.contains("open") ? menuKapat() : menuAc()
+  );
+  overlay.addEventListener("click", menuKapat);
+  window.addEventListener("keydown", (e) => { if (e.key === "Escape") menuKapat(); });
+  searchEl.addEventListener("input", menuCiz);
+
+  // 5b) Klasör seçme (dosya çift tıklanarak açıldığında tarayıcı klasörü kendi okuyamaz).
+  // index.html ile AYNI klasörü seçin. Liste tarayıcıya kaydedilir, bir daha sormaz.
+  const KAYIT = "derslerim_liste_v1";
+
+  function kayitOku() {
+    try { return JSON.parse(localStorage.getItem(KAYIT)) || []; } catch (e) { return []; }
+  }
+  function kayitYaz(liste) {
+    try { localStorage.setItem(KAYIT, JSON.stringify(liste)); } catch (e) {}
+  }
+
+  async function klasorSecildi(files) {
+    const liste = [];
+    for (const f of files) {
+      const parcalar = (f.webkitRelativePath || f.name).split("/");
+      if (parcalar.length > 2) continue;              // alt klasörleri atla
+      if (!/\.html?$/i.test(f.name) || haric(f.name)) continue;
+      let baslik = guzelAd(f.name);
+      try {
+        const
