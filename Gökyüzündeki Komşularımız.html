@@ -1,0 +1,564 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Gökyüzündeki Komşularımız</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: renkli kazanım bantları, her kazanım kendi rengiyle; sonda etkileşimli soru bankası */
+:root{
+  --bg:#F1EFFF; --surface:#FFFFFF; --fg:#1B1B3A; --muted:#56567E; --line:#D9D5F6;
+  --sun:#FFB000; --on-sun:#33240A;
+  --moon:#3D5AFE; --on-moon:#FFFFFF;
+  --violet:#A62FC4; --on-violet:#FFFFFF;
+  --earth:#00876A; --on-earth:#FFFFFF;
+  --coral:#E8365F; --good:#0E8F5B; --bad:#D6304F;
+  --font-display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --font-body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B0E2A; --surface:#161A44; --fg:#F1F0FF; --muted:#AAB0DC; --line:#2B3070;
+    --sun:#FFC83D; --on-sun:#2B1D00;
+    --moon:#8EA0FF; --on-moon:#0B0E2A;
+    --violet:#E08BFF; --on-violet:#2A0A36;
+    --earth:#3DDBA8; --on-earth:#032A1F;
+    --coral:#FF7C9C; --good:#4BE3A0; --bad:#FF8AA0;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B0E2A; --surface:#161A44; --fg:#F1F0FF; --muted:#AAB0DC; --line:#2B3070;
+  --sun:#FFC83D; --on-sun:#2B1D00;
+  --moon:#8EA0FF; --on-moon:#0B0E2A;
+  --violet:#E08BFF; --on-violet:#2A0A36;
+  --earth:#3DDBA8; --on-earth:#032A1F;
+  --coral:#FF7C9C; --good:#4BE3A0; --bad:#FF8AA0;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:17px;line-height:1.6;
+  padding-block:0 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0}
+.wrap{max-width:980px;margin-inline:auto}
+a{color:inherit}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center;padding-block:36px 28px}
+.eyebrow{font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--coral)}
+.hero h1{font-size:clamp(38px,7vw,68px);font-weight:800;margin-block:8px 14px}
+.hero h1 span{background:linear-gradient(90deg,var(--sun),var(--coral) 55%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:19px;color:var(--muted);max-width:46ch}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;font-weight:800;font-size:15px;text-decoration:none;
+  background:var(--c);color:var(--on);transition:transform .15s}
+.chip:hover{transform:translateY(-3px) rotate(-1.5deg)}
+.chip:focus-visible,.tab:focus-visible,.opt:focus-visible,summary:focus-visible,.phase:focus-visible,.reset:focus-visible{outline:3px solid var(--fg);outline-offset:3px}
+.c-sun{--c:var(--sun);--on:var(--on-sun)} .c-moon{--c:var(--moon);--on:var(--on-moon)}
+.c-violet{--c:var(--violet);--on:var(--on-violet)} .c-earth{--c:var(--earth);--on:var(--on-earth)}
+.c-coral{--c:var(--coral);--on:#fff}
+.hero-art{width:100%;max-width:100%;height:auto}
+.orbit{transform-origin:250px 120px;animation:spin 14s linear infinite}
+.spin-self{transform-origin:250px 120px;animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.orbit,.spin-self{animation:none}.chip{transition:none}}
+
+/* SECTIONS */
+.sec{margin-top:40px;border-radius:28px;background:var(--surface);border:2px solid var(--c);overflow:hidden}
+.band{background:var(--c);color:var(--on);padding:22px 26px;display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline}
+.band .code{font-family:var(--font-display);font-weight:800;font-size:15px;letter-spacing:.06em;padding:3px 12px;border-radius:999px;background:color-mix(in srgb,var(--on) 18%,transparent)}
+.band h2{font-size:clamp(24px,4.4vw,34px);font-weight:800;flex:1 1 280px}
+.body{padding:26px;display:grid;gap:26px}
+.lead2{font-size:19px;font-weight:600}
+h3{font-size:22px;font-weight:700;color:var(--c);margin-bottom:12px}
+:root[data-theme="dark"] h3{color:var(--c)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.card{background:color-mix(in srgb,var(--c) 13%,var(--surface));border-radius:18px;padding:16px 18px;min-width:0}
+.card b{display:block;font-family:var(--font-display);font-size:19px;margin-bottom:2px}
+.card .big{font-family:var(--font-display);font-weight:800;font-size:34px;line-height:1.05;color:var(--c);display:block}
+.pillrow{display:flex;flex-wrap:wrap;gap:8px}
+.tag{padding:3px 12px;border-radius:999px;font-weight:800;font-size:13px;background:var(--c);color:var(--on)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:22px;align-items:center}
+.callout{border-radius:18px;padding:16px 20px;font-weight:600;background:color-mix(in srgb,var(--coral) 14%,var(--surface));border:2px dashed var(--coral)}
+.callout b{color:var(--coral)}
+.summary{border-radius:18px;padding:16px 20px;background:var(--c);color:var(--on);font-weight:700;font-size:18px}
+.summary small{display:block;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.85;font-size:12px;margin-bottom:2px}
+ul.ticks,ol.steps{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+ul.ticks li{padding-left:30px;position:relative}
+ul.ticks li::before{content:"";position:absolute;left:4px;top:.5em;width:14px;height:14px;border-radius:50%;background:var(--c)}
+ol.steps{counter-reset:s}
+ol.steps li{counter-increment:s;padding-left:46px;position:relative;min-height:34px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--c);color:var(--on);
+  font-family:var(--font-display);font-weight:800;display:grid;place-items:center}
+.tablewrap{overflow-x:auto;border-radius:16px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;min-width:480px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:color-mix(in srgb,var(--c) 22%,var(--surface));font-family:var(--font-display);font-size:16px}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:800}
+
+/* moon phases */
+.phases{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+.phase{background:color-mix(in srgb,var(--c) 10%,var(--surface));border:2px solid transparent;border-radius:16px;padding:10px 4px 8px;cursor:pointer;text-align:center;
+  font:inherit;color:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.phase svg{width:100%;max-width:64px;height:auto}
+.phase span{font-size:12.5px;font-weight:800;line-height:1.2}
+.phase[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 26%,var(--surface))}
+.phase-info{margin-top:12px;border-radius:16px;padding:14px 18px;background:color-mix(in srgb,var(--c) 14%,var(--surface));font-weight:600;min-height:3.4em}
+@media (max-width:640px){.phases{grid-template-columns:repeat(4,1fr)}}
+
+/* layers */
+.layers svg{width:100%;max-width:260px;height:auto;display:block;margin-inline:auto}
+
+/* QUIZ */
+.quiz-top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between}
+.score{display:flex;gap:10px;flex-wrap:wrap;font-weight:800}
+.score span{padding:6px 14px;border-radius:999px;background:color-mix(in srgb,var(--c) 16%,var(--surface))}
+.bar{height:12px;border-radius:999px;background:color-mix(in srgb,var(--c) 18%,var(--surface));overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sun),var(--coral),var(--violet));transition:width .35s}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tab{font:inherit;font-weight:800;border:2px solid var(--tc);background:transparent;color:var(--fg);padding:8px 16px;border-radius:999px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--tc);color:var(--ton)}
+.tab small{font-weight:800;opacity:.8;margin-left:6px}
+.q{border:2px solid var(--line);border-radius:20px;padding:16px 18px;display:grid;gap:12px;background:var(--surface)}
+.q.done-ok{border-color:var(--good)} .q.done-bad{border-color:var(--bad)}
+.q h4{margin:0;font-weight:700;font-size:17.5px;line-height:1.5}
+.q h4 em{font-style:normal;font-family:var(--font-display);font-weight:800;background:var(--c);color:var(--on);border-radius:10px;padding:1px 10px;margin-right:8px}
+.opts{display:grid;gap:8px}
+.opt{font:inherit;text-align:left;display:flex;gap:12px;align-items:flex-start;padding:10px 14px;border-radius:14px;cursor:pointer;color:var(--fg);
+  background:color-mix(in srgb,var(--c) 9%,var(--surface));border:2px solid transparent}
+.opt:hover:not(:disabled){border-color:var(--c)}
+.opt b{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:var(--on);font-family:var(--font-display)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 18%,var(--surface))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 16%,var(--surface))}
+.why{font-weight:600;border-radius:12px;padding:10px 14px;background:color-mix(in srgb,var(--c) 12%,var(--surface))}
+.why b{color:var(--c)}
+details.open{border:2px dashed var(--c);border-radius:20px;padding:14px 18px;background:var(--surface)}
+details.open summary{cursor:pointer;font-weight:700;list-style:none}
+details.open summary em{font-style:normal;font-family:var(--font-display);font-weight:800;background:var(--c);color:var(--on);border-radius:10px;padding:1px 10px;margin-right:8px}
+details.open p.ans{margin-top:10px;padding:10px 14px;border-radius:12px;background:color-mix(in srgb,var(--c) 12%,var(--surface));font-weight:600}
+.reset{font:inherit;font-weight:800;border:2px solid var(--fg);background:transparent;color:var(--fg);border-radius:999px;padding:8px 18px;cursor:pointer}
+.reset:hover{background:var(--fg);color:var(--bg)}
+.yq{gap:14px}
+.ctxbox{white-space:pre-line;font-weight:600;border-radius:14px;padding:12px 16px;background:color-mix(in srgb,var(--c) 11%,var(--surface))}
+.q h4.ask{font-size:18px}
+.parts{display:grid;gap:12px}
+.part{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:start}
+.plabel{display:grid;gap:2px}
+.plabel b{display:inline-block;justify-self:start;font-family:var(--font-display);font-weight:800;padding:2px 14px;border-radius:999px;background:var(--c);color:var(--on)}
+.plabel small{color:var(--muted);font-weight:600;font-size:13.5px;line-height:1.35}
+.part textarea{width:100%;font:inherit;color:var(--fg);background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:10px 14px;resize:vertical;line-height:1.55}
+.part textarea:focus{outline:3px solid color-mix(in srgb,var(--c) 55%,transparent);border-color:var(--c)}
+.yq-foot{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.wc{font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums}
+.sample{border:2px dashed var(--c);border-radius:14px;padding:12px 16px;display:grid;gap:8px;background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+.sample p{margin:0;font-weight:600}
+.sample .sh{font-family:var(--font-display);font-size:18px;color:var(--fg)}
+.sample .tag{margin-right:10px;vertical-align:1px}
+@media (max-width:640px){.part{grid-template-columns:1fr;gap:6px}}
+footer{margin-top:36px;text-align:center;color:var(--muted);font-weight:700}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr}
+  .split{grid-template-columns:1fr}
+  .body{padding:20px 16px}
+  .band{padding:18px 16px}
+}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div>
+    <div class="eyebrow">5. Sınıf Fen Bilimleri · 1. Ünite</div>
+    <h1>Gökyüzündeki <span>Komşularımız</span> ve Biz</h1>
+    <p class="lead">Güneş, Ay ve Dünya birbirleriyle nasıl bağlantılı? Ders anlatımını oku, Ay'ın evrelerine dokun, sonra soru bankasında kendini dene.</p>
+    <nav class="chips" aria-label="Bölümler">
+      <a class="chip c-sun" href="#gunes">FB.5.1.1 Güneş</a>
+      <a class="chip c-moon" href="#ay">FB.5.1.2 Ay</a>
+      <a class="chip c-violet" href="#evreler">FB.5.1.3 Evreler</a>
+      <a class="chip c-earth" href="#model">FB.5.1.4 Model</a>
+      <a class="chip c-coral" href="#sorular">Soru bankası</a>
+    </nav>
+  </div>
+  <svg class="hero-art" viewBox="0 0 360 240" role="img" aria-label="Güneş, Dünya ve Dünya'nın çevresinde dönen Ay">
+    <defs>
+      <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFE36B"/><stop offset=".55" stop-color="#FFB000"/><stop offset="1" stop-color="#FF7A00" stop-opacity="0"/></radialGradient>
+      <radialGradient id="earthg" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#6FE3FF"/><stop offset="1" stop-color="#1D6FE8"/></radialGradient>
+    </defs>
+    <circle cx="60" cy="120" r="92" fill="url(#glow)"/>
+    <circle cx="60" cy="120" r="52" fill="#FFB000"/>
+    <circle cx="60" cy="120" r="52" fill="none" stroke="#FFE36B" stroke-width="5" stroke-dasharray="3 9"/>
+    <ellipse cx="250" cy="120" rx="82" ry="82" fill="none" stroke="#9AA6FF" stroke-width="2" stroke-dasharray="4 8" opacity=".7"/>
+    <g class="spin-self"><circle cx="250" cy="120" r="30" fill="url(#earthg)"/>
+      <path d="M236 108c8-8 18-4 20 3s-8 8-10 14-12 4-12-6 0-8 2-11z" fill="#3DDC84"/><path d="M258 130c6-2 12 2 10 8s-10 4-10-8z" fill="#3DDC84"/></g>
+    <g class="orbit"><circle cx="250" cy="38" r="9" fill="#E7E8F4"/><circle cx="246" cy="35" r="2.2" fill="#B9BCD3"/><circle cx="253" cy="42" r="1.6" fill="#B9BCD3"/></g>
+    <g fill="#FF7BAC"><circle cx="330" cy="40" r="3"/><circle cx="300" cy="215" r="2.4"/><circle cx="150" cy="30" r="2.4"/></g>
+    <g fill="#3DDBA8"><circle cx="340" cy="190" r="3"/><circle cx="160" cy="215" r="2"/></g>
+  </svg>
+</header>
+
+<!-- GÜNEŞ -->
+<section class="sec c-sun" id="gunes">
+  <div class="band"><span class="code">FB.5.1.1</span><h2>Güneş'in yapısı ve dönme hareketi</h2></div>
+  <div class="body">
+    <p class="lead2">Güneş, Dünya'ya en yakın yıldızdır; çok sıcak gazlardan oluşan dev bir küredir ve kendi ışığını üretir.</p>
+    <div class="grid">
+      <div class="card"><b>Bir yıldız</b>Kendi ışık ve ısısını kendisi üretir. Gezegen ya da uydu değildir.</div>
+      <div class="card"><b>Gazdan bir küre</b>Çoğunlukla hidrojen ve helyum gazlarından oluşur. Katı bir yüzeyi yoktur.</div>
+      <div class="card"><span class="big">109 kat</span>Çapı yaklaşık 1,39 milyon km. Dünya'dan 109 kat büyük.</div>
+      <div class="card"><span class="big">150 milyon km</span>Dünya'ya uzaklığı. Işığı Dünya'ya yaklaşık 8 dakikada gelir.</div>
+    </div>
+
+    <div class="split layers">
+      <svg viewBox="0 0 260 260" role="img" aria-label="Güneş'in katmanları: çekirdek, yüzey, atmosfer">
+        <circle cx="130" cy="130" r="124" fill="#FF9E1B" opacity=".25"/>
+        <circle cx="130" cy="130" r="108" fill="#FFD23F" opacity=".55"/>
+        <circle cx="130" cy="130" r="92" fill="#FFB000"/>
+        <circle cx="130" cy="130" r="42" fill="#FF5A1F"/>
+        <circle cx="130" cy="130" r="42" fill="none" stroke="#FFF1A8" stroke-width="3" stroke-dasharray="2 7"/>
+      </svg>
+      <div>
+        <h3>Güneş'in yapısı</h3>
+        <div class="tablewrap"><table>
+          <tr><th>Katman</th><th>Özellik</th></tr>
+          <tr><td><b>Çekirdek</b></td><td>En içte. Yaklaşık <b>15 milyon °C</b>. Enerji burada üretilir.</td></tr>
+          <tr><td><b>Yüzey</b> (fotosfer)</td><td>Gördüğümüz parlak katman. Yaklaşık <b>5 500 °C</b>.</td></tr>
+          <tr><td><b>Atmosfer</b></td><td>Yüzeyin üstündeki gaz tabakası: kromosfer ve korona.</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div>
+      <h3>Güneş de döner</h3>
+      <div class="two">
+        <p>Güneş de kendi ekseni etrafında döner. Bunu <b>Güneş lekeleri</b> sayesinde anlarız. Lekeler, çevresinden daha soğuk olduğu için koyu görünen bölgelerdir. Günler içinde yüzeyde bir kenardan diğerine kaymaları Güneş'in döndüğünü gösterir.</p>
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <div class="card"><span class="big">~25 gün</span>Ekvator bölgesi</div>
+          <div class="card"><span class="big">30+ gün</span>Kutuplara yakın bölgeler</div>
+        </div>
+      </div>
+      <p style="margin-top:12px">Güneş katı olmadığı için her yerinde aynı hızda dönmez.</p>
+    </div>
+    <div class="callout"><b>Dikkat!</b> Güneş'e çıplak gözle ya da dürbünle asla doğrudan bakılmaz. Lekeler yalnızca özel filtreli gözlükle ya da projeksiyon yöntemiyle güvenle incelenir.</div>
+    <div class="summary"><small>Bir cümleyle</small>Güneş kendi ışığını üreten bir yıldızdır; çekirdek, yüzey ve atmosferden oluşur ve kendi ekseni etrafında döner.</div>
+  </div>
+</section>
+
+<!-- AY -->
+<section class="sec c-moon" id="ay">
+  <div class="band"><span class="code">FB.5.1.2</span><h2>Ay'ın özellikleri, dönme ve dolanma hareketleri</h2></div>
+  <div class="body">
+    <p class="lead2">Ay, Dünya'nın tek doğal uydusudur. Kendi ışığı yoktur; Güneş'ten aldığı ışığı yansıttığı için parlak görünür.</p>
+    <div class="grid">
+      <div class="card"><span class="big">3 474 km</span>Çapı. Dünya'nın yaklaşık dörtte biri.</div>
+      <div class="card"><span class="big">384 000 km</span>Dünya'ya ortalama uzaklığı.</div>
+      <div class="card"><span class="big">127 / –173 °C</span>Gündüz ve gece yüzey sıcaklığı.</div>
+      <div class="card"><span class="big">1/6</span>Yer çekimi, Dünya'nın altıda biri kadar.</div>
+    </div>
+    <div class="two">
+      <div>
+        <h3>Yüzeyi nasıl?</h3>
+        <ul class="ticks">
+          <li>Kraterler, dağlar ve düzlüklerle kaplıdır.</li>
+          <li>Kraterler, Ay'a çarpan göktaşlarının açtığı çukurlardır.</li>
+          <li>Atmosferi ve sıvı suyu yoktur; rüzgâr, bulut ve yağmur olmaz, canlı yaşayamaz.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Işığı nereden?</h3>
+        <p>Ay'ın kendi ışığı yoktur. Güneş ışığını <b>yansıtır</b>. Gece gökyüzünde parlak görünmesinin nedeni budur.</p>
+      </div>
+    </div>
+
+    <div>
+      <h3>Dönme ve dolanma</h3>
+      <div class="two">
+        <div class="card"><b>Dönme</b>Ay'ın <b>kendi ekseni</b> etrafında dönmesi.<span class="big" style="margin-top:6px">~27,3 gün</span></div>
+        <div class="card"><b>Dolanma</b>Ay'ın <b>Dünya'nın çevresinde</b> yörüngesinde dönmesi.<span class="big" style="margin-top:6px">~27,3 gün</span></div>
+      </div>
+      <div class="callout" style="margin-top:14px"><b>Hep aynı yüz!</b> Dönme ve dolanma süreleri yaklaşık eşit olduğu için Dünya'dan Ay'ın hep aynı yüzünü görürüz. Diğer yüzünü göremeyiz.</div>
+    </div>
+
+    <div>
+      <h3>Bilimsel çıkarım yapalım</h3>
+      <div class="tablewrap"><table>
+        <tr><th>Gözlem</th><th>Çıkarım</th></tr>
+        <tr><td>Yüzeyde çok sayıda krater var, atmosfer yok.</td><td>Atmosfer olmadığı için göktaşları yanıp yok olmadan yüzeye çarpar ve kraterler korunur.</td></tr>
+        <tr><td>Ay'ın aynı yüzü hep görünüyor.</td><td>Ay'ın dönme ve dolanma süreleri yaklaşık eşittir.</td></tr>
+      </table></div>
+    </div>
+    <div class="summary"><small>Bir cümleyle</small>Ay, ışığı yansıtan, atmosferi olmayan bir uydudur; kendi ekseninde dönerken Dünya'nın çevresinde dolanır.</div>
+  </div>
+</section>
+
+<!-- EVRELER -->
+<section class="sec c-violet" id="evreler">
+  <div class="band"><span class="code">FB.5.1.3</span><h2>Ay'ın evrelerini temsil eden model</h2></div>
+  <div class="body">
+    <p class="lead2">Ay dolanırken aydınlık yüzünün Dünya'dan görünen miktarı değişir. Ay küçülüp büyümez; yalnızca görünen kısım değişir.</p>
+    <div class="two">
+      <div class="card"><b>Neden evre oluşur?</b>Ay'ın her zaman yarısı Güneş tarafından aydınlatılır. Dünya'dan baktığımızda bu aydınlık yarının ne kadarını gördüğümüz, Ay'ın konumuna göre değişir.</div>
+      <div class="card"><span class="big">29,5 gün</span>Bir evre döngüsünün süresi.</div>
+    </div>
+    <div>
+      <h3>Sekiz evre (birine dokun)</h3>
+      <div class="phases" id="phases" role="group" aria-label="Ay'ın evreleri"></div>
+      <div class="phase-info" id="phaseInfo" aria-live="polite"></div>
+    </div>
+    <div class="two">
+      <div>
+        <h3>Modelle gösterelim</h3>
+        <p style="margin-bottom:10px"><b>Malzemeler:</b> el feneri (Güneş), top ya da portakal (Ay), sen (Dünya), karanlık oda.</p>
+        <ol class="steps">
+          <li>El fenerini bir köşeye yerleştir ve yak.</li>
+          <li>Topu kolunu uzatarak tut ve fenere göre farklı konumlara getir.</li>
+          <li>Yavaşça kendi etrafında dön ve topun aydınlık kısmının nasıl değiştiğini izle.</li>
+          <li>Her konumda aydınlık bölümü çiz ve hangi evreye benzediğini yaz.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Model neyi gösterir?</h3>
+        <p>Topun yarısı her zaman aydınlıktır. Görünüşü, topun fener ile senin aranda nerede durduğuna göre değişir.</p>
+        <div class="callout" style="margin-top:14px"><b>Sık yapılan yanlışlar:</b> Evreler Dünya'nın gölgesinden oluşmaz. Ay gerçekten küçülüp büyümez.</div>
+      </div>
+    </div>
+    <div class="summary"><small>Bir cümleyle</small>Ay dolanırken aydınlık yüzünün Dünya'dan görünen bölümü değiştiği için yeni Ay'dan dolunaya ve tekrar yeni Ay'a uzanan evreler oluşur.</div>
+  </div>
+</section>
+
+<!-- MODEL -->
+<section class="sec c-earth" id="model">
+  <div class="band"><span class="code">FB.5.1.4</span><h2>Güneş, Dünya ve Ay'ın hareketleri ve büyüklükleri</h2></div>
+  <div class="body">
+    <p class="lead2">Gerçek boyutlar çok büyük olduğu için Güneş, Dünya ve Ay'ı küçültülmüş bir modelle gösteririz.</p>
+    <div>
+      <h3>Kim nasıl hareket ediyor?</h3>
+      <div class="tablewrap"><table>
+        <tr><th>Gök cismi</th><th>Hareketi</th><th>Süresi</th></tr>
+        <tr><td><b>Güneş</b></td><td>Kendi ekseni etrafında döner</td><td class="num">~25 gün (ekvator)</td></tr>
+        <tr><td rowspan="2"><b>Dünya</b></td><td>Kendi ekseni etrafında döner</td><td class="num">~24 saat</td></tr>
+        <tr><td>Güneş'in çevresinde dolanır</td><td class="num">365 gün 6 saat</td></tr>
+        <tr><td rowspan="2"><b>Ay</b></td><td>Kendi ekseni etrafında döner</td><td class="num">~27,3 gün</td></tr>
+        <tr><td>Dünya'nın çevresinde dolanır</td><td class="num">~27,3 gün</td></tr>
+      </table></div>
+      <p style="margin-top:10px">Dünya'nın dönmesiyle <b>gece ve gündüz</b> oluşur.</p>
+    </div>
+    <div>
+      <h3>Büyüklük sırası: Güneş &gt; Dünya &gt; Ay</h3>
+      <div class="grid">
+        <div class="card"><span class="big">109×</span>Güneş'in çapı, Dünya'nın çapının katı.</div>
+        <div class="card"><span class="big">1,3 milyon</span>Güneş'in içine sığacak Dünya sayısı (yaklaşık).</div>
+        <div class="card"><span class="big">~4×</span>Dünya'nın çapı, Ay'ın çapının katı.</div>
+      </div>
+    </div>
+    <div>
+      <h3>Ölçekli model: Dünya 1 cm olsun</h3>
+      <div class="tablewrap"><table>
+        <tr><th>Gök cismi</th><th>Model boyutu</th><th>Modelde mesafe</th></tr>
+        <tr><td><b>Dünya</b></td><td class="num">1 cm</td><td>–</td></tr>
+        <tr><td><b>Ay</b></td><td class="num">~0,3 cm</td><td class="num">Dünya'dan ~30 cm</td></tr>
+        <tr><td><b>Güneş</b></td><td class="num">~109 cm</td><td class="num">Dünya'dan ~118 m</td></tr>
+      </table></div>
+      <p style="margin-top:10px">Güneş 1 metrelik bir top, Dünya küçük bir boncuk olsa aralarındaki mesafe bir okul bahçesi kadar olur. Bu yüzden çizimlerde uzaklıklar çoğunlukla ölçeksiz gösterilir.</p>
+    </div>
+    <div>
+      <h3>Model yaparken</h3>
+      <ul class="ticks">
+        <li>Büyüklük sırası doğru olmalı: Güneş &gt; Dünya &gt; Ay.</li>
+        <li>Hareketleri oklarla göster: Dünya ve Ay kendi ekseninde döner; Ay Dünya'nın, Dünya Güneş'in çevresinde dolanır.</li>
+        <li>Model gerçeğin kendisi değil, onu anlamayı kolaylaştıran bir temsildir ve sınırlılıkları vardır.</li>
+      </ul>
+    </div>
+    <div class="summary"><small>Bir cümleyle</small>Güneş en büyük, Ay en küçük gök cismidir; Dünya Güneş'in, Ay da Dünya'nın çevresinde dolanır ve hepsi kendi ekseni etrafında döner.</div>
+  </div>
+</section>
+
+<!-- SORU BANKASI -->
+<section class="sec c-coral" id="sorular">
+  <div class="band"><span class="code">84 SORU</span><h2>Soru bankası</h2></div>
+  <div class="body">
+    <div class="quiz-top">
+      <div class="score" aria-live="polite"><span id="sOk">Doğru: 0</span><span id="sBad">Yanlış: 0</span><span id="sAll">0 / 40</span></div>
+      <button class="reset" id="reset" type="button">Baştan başla</button>
+    </div>
+    <div class="bar" aria-hidden="true"><i id="barFill"></i></div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div id="panel" role="tabpanel" style="display:grid;gap:16px"></div>
+  </div>
+</section>
+<footer>3 Kasım Salı Fen Bilimleri dersi · 5. Sınıf 1. Ünite</footer>
+</div>
+
+<script>
+/* Ay evreleri */
+var PH=[
+ {n:"Yeni Ay",f:0,w:1,t:"Aydınlık yüz Güneş'e, karanlık yüz Dünya'ya bakar. Ay görünmez."},
+ {n:"İlk hilal",f:.2,w:1,t:"Ay'ın ince bir kenarı görünür. Aydınlık bölüm büyümektedir."},
+ {n:"İlk dördün",f:.5,w:1,t:"Ay'ın yarım dairesi görünür."},
+ {n:"Şişkin Ay (büyüyen)",f:.8,w:1,t:"Aydınlık bölüm yarımdan büyüktür ve büyümeye devam eder."},
+ {n:"Dolunay",f:1,w:1,t:"Aydınlık yüzün tamamı Dünya'dan görünür."},
+ {n:"Şişkin Ay (küçülen)",f:.8,w:-1,t:"Aydınlık bölüm küçülmeye başlar."},
+ {n:"Son dördün",f:.5,w:-1,t:"Yine yarım daire görünür ama aydınlanan taraf ilk dördünün tersidir."},
+ {n:"Son hilal",f:.2,w:-1,t:"Aydınlık bölüm ince bir kenara iner; yeni Ay yaklaşır."}
+];
+function moonSvg(f,w){
+  var r=30,rx=Math.max(.01,r*Math.abs(1-2*f)),sw=f<.5?0:1;
+  var lit=f===0?"":(f===1?'<circle cx="0" cy="0" r="'+r+'" fill="#FFE9A8"/>':'<path d="M0,-'+r+' A'+r+','+r+' 0 0 1 0,'+r+' A'+rx+','+r+' 0 0 '+sw+' 0,-'+r+' Z" fill="#FFE9A8"/>');
+  return '<svg viewBox="-34 -34 68 68" aria-hidden="true"><circle cx="0" cy="0" r="'+r+'" fill="#2B2F6B"/><g transform="scale('+w+',1)">'+lit+'</g><circle cx="0" cy="0" r="'+r+'" fill="none" stroke="#9AA6FF" stroke-width="1.5"/></svg>';
+}
+(function(){
+  var box=document.getElementById("phases"),info=document.getElementById("phaseInfo");
+  function sel(i){
+    var bs=box.children;
+    for(var k=0;k<bs.length;k++)bs[k].setAttribute("aria-pressed",k===i?"true":"false");
+    info.textContent=PH[i].n+": "+PH[i].t;
+  }
+  PH.forEach(function(p,i){
+    var b=document.createElement("button");b.type="button";b.className="phase";
+    b.innerHTML=moonSvg(p.f,p.w)+"<span>"+p.n+"</span>";
+    b.addEventListener("click",function(){sel(i)});
+    box.appendChild(b);
+  });
+  sel(4);
+})();
+
+/* Soru bankası */
+var G=[
+{id:"g1",name:"FB.5.1.1 Güneş",cls:"c-sun",qs:[
+ {n:1,q:"Güneş ile ilgili aşağıdakilerden hangisi doğrudur?",o:["Bir gezegendir.","Dünya'nın uydusudur.","Kendi ışığını üretir.","Katı bir yüzeyi vardır."],a:2,e:"Güneş bir yıldızdır ve kendi ışığını üretir."},
+ {n:2,q:"Güneş'in katmanları içten dışa doğru hangi seçenekte doğru sıralanmıştır?",o:["Çekirdek – yüzey – atmosfer","Yüzey – çekirdek – atmosfer","Atmosfer – yüzey – çekirdek","Çekirdek – atmosfer – yüzey"],a:0,e:"İçten dışa: çekirdek, yüzey, atmosfer."},
+ {n:3,q:"Güneş lekelerinin günler içinde Güneş yüzeyinde yer değiştirmesi bize neyi gösterir?",o:["Güneş'in Dünya'ya yaklaştığını","Güneş'in kendi ekseni etrafında döndüğünü","Güneş'in küçüldüğünü","Dünya'nın Güneş'in çevresinde dolandığını"],a:1,e:"Lekelerin yer değiştirmesi Güneş'in döndüğünü gösterir."},
+ {n:4,q:"Aşağıdakilerden hangisi Güneş'in özelliklerinden biri değildir?",o:["Sıcak gazlardan oluşur.","Dünya'ya ışık ve ısı verir.","Dünya'nın çevresinde dolanır.","Bir yıldızdır."],a:2,e:"Dünya Güneş'in çevresinde dolanır; Güneş Dünya'nın çevresinde dolanmaz."},
+ {n:5,q:"Güneş'in enerjisinin üretildiği, sıcaklığın en yüksek olduğu bölüm hangisidir?",o:["Çekirdek","Yüzey","Kromosfer","Korona"],a:0,e:"Enerji çekirdekte üretilir; en sıcak bölge orasıdır."},
+ {n:6,q:"Güneş'i güvenle gözlemlemek için aşağıdakilerden hangisi yapılmalıdır?",o:["Dürbünle doğrudan bakılmalıdır.","Siyah renkli sıradan bir gözlük takılmalıdır.","Özel filtreli gözlük ya da projeksiyon yöntemi kullanılmalıdır.","Çıplak gözle kısa süre bakılmalıdır."],a:2,e:"Güneş'e doğrudan bakılmaz; filtreli gözlük ya da projeksiyon kullanılır."},
+ {n:101,q:"Güneş'in çapı yaklaşık kaç kilometredir?",o:["12 742 km", "3 474 km", "1,39 milyon km", "150 milyon km"],a:2,e:"Güneş'in çapı yaklaşık 1,39 milyon km'dir. 150 milyon km, Dünya'ya olan uzaklığıdır."},
+ {n:102,q:"Güneş'ten çıkan ışık Dünya'ya yaklaşık ne kadar sürede ulaşır?",o:["8 saniye", "8 dakika", "8 saat", "8 gün"],a:1,e:"Işık Güneş'ten Dünya'ya yaklaşık 8 dakikada ulaşır."},
+ {n:103,q:"Güneş yüzeyinde görülen, çevresinden daha soğuk olduğu için koyu görünen bölgelere ne ad verilir?",o:["Krater", "Evre", "Güneş lekesi", "Yörünge"],a:2,e:"Güneş yüzeyindeki koyu bölgelere Güneş lekesi denir."},
+ {n:104,q:"Aşağıdakilerden hangisi Güneş'le ilgili yanlış bir bilgidir?",o:["Çekirdeği yüzeyinden daha sıcaktır.", "Atmosferi, yüzeyinin üstündeki gaz tabakasıdır.", "Katı ve kayalık bir yapıya sahiptir.", "Enerjisi çekirdekte üretilir."],a:2,e:"Güneş sıcak gazlardan oluşur; katı ve kayalık bir yapısı yoktur."}
+ ],open:[{n:7,q:"Güneş'in neden bir yıldız olduğunu bir cümleyle açıkla. Güneş'in döndüğünü nasıl anlarız?",a:"Güneş kendi ışık ve ısısını üreten sıcak gazlardan oluşan bir gök cismi olduğu için yıldızdır. Güneş lekelerinin günler içinde yüzeyde yer değiştirmesinden döndüğünü anlarız."}]},
+{id:"g2",name:"FB.5.1.2 Ay",cls:"c-moon",qs:[
+ {n:8,q:"Ay ile ilgili aşağıdakilerden hangisi doğrudur?",o:["Kendi ışığını üretir.","Dünya'nın doğal uydusudur.","Yüzeyi tamamen sularla kaplıdır.","Yoğun bir atmosfere sahiptir."],a:1,e:"Ay, Dünya'nın doğal uydusudur."},
+ {n:9,q:"Ay'da rüzgâr, bulut ve yağmur görülmemesinin nedeni nedir?",o:["Ay'ın çok soğuk olması","Ay'ın atmosferinin olmaması","Ay'ın çok büyük olması","Ay'ın Güneş'e yakın olması"],a:1,e:"Atmosfer olmadığı için hava olayları görülmez."},
+ {n:10,q:"Ay yüzeyindeki kraterler nasıl oluşmuştur?",o:["Ay'a çarpan göktaşları ile","Yağmur sularının aşındırması ile","Rüzgârın savurduğu kumlar ile","Güneş lekeleri ile"],a:0,e:"Kraterler göktaşı çarpmasıyla oluşur."},
+ {n:11,q:"Dünya'dan Ay'ın hep aynı yüzü görülür. Bunun nedeni aşağıdakilerden hangisidir?",o:["Ay'ın hiç dönmemesi","Ay'ın Dünya çevresinde hiç dolanmaması","Ay'ın dönme ve dolanma sürelerinin yaklaşık eşit olması","Ay'ın Güneş çevresinde dolanması"],a:2,e:"Dönme ve dolanma süreleri yaklaşık eşittir (yaklaşık 27,3 gün)."},
+ {n:12,q:"Ay'ın Dünya'nın çevresinde yörüngesinde dönmesine ne ad verilir?",o:["Dönme","Dolanma","Yansıma","Evre"],a:1,e:"Dünya çevresinde dönmeye dolanma denir."},
+ {n:13,q:"Ay'ın gökyüzünde parlak görünmesinin nedeni aşağıdakilerden hangisidir?",o:["Kendi ışığını üretmesi","Dünya'nın ışığını yansıtması","Güneş'ten gelen ışığı yansıtması","Yıldızlardan ışık alması"],a:2,e:"Ay, Güneş ışığını yansıtır."},
+ {n:14,q:"Bir bilim insanı \"Ay yüzeyinde çok sayıda krater var; Ay'da atmosfer yok\" gözlemini yapıyor. Bu gözlemlerden hangi çıkarım yapılabilir?",o:["Ay'da hiç göktaşı çarpması olmamıştır.","Atmosfer olmadığı için göktaşları yanıp yok olmadan yüzeye çarpar ve kraterler oluşur.","Kraterleri yağmur oluşturmuştur.","Ay'ın yüzeyi sudan oluşmuştur."],a:1,e:"Atmosfer yokluğu göktaşlarının yüzeye ulaşmasını kolaylaştırır."},
+ {n:105,q:"Ay'ın Dünya'ya ortalama uzaklığı yaklaşık kaç kilometredir?",o:["38 400 km", "384 000 km", "3 840 000 km", "150 000 000 km"],a:1,e:"Ay, Dünya'dan ortalama 384 000 km uzaktadır."},
+ {n:106,q:"Aşağıdakilerden hangisi Ay yüzeyinde görülen şekillerden biri değildir?",o:["Krater", "Dağ", "Düzlük", "Okyanus"],a:3,e:"Ay'da sıvı su yoktur; bu yüzden okyanus bulunmaz."},
+ {n:107,q:"Ay'ın kendi ekseni etrafında bir tam tur dönmesi yaklaşık kaç gün sürer?",o:["1 gün", "7 gün", "27,3 gün", "365 gün"],a:2,e:"Ay'ın dönme süresi yaklaşık 27,3 gündür."}
+ ],open:[{n:15,q:"Ay'ın dönme ve dolanma hareketleri arasındaki farkı açıkla.",a:"Dönme, Ay'ın kendi ekseni etrafında dönmesidir. Dolanma ise Ay'ın Dünya'nın çevresinde yörüngesi boyunca dönmesidir."}]},
+{id:"g3",name:"FB.5.1.3 Evreler",cls:"c-violet",qs:[
+ {n:16,q:"Ay'ın evrelerinin oluşmasının nedeni aşağıdakilerden hangisidir?",o:["Dünya'nın gölgesinin Ay'ı örtmesi","Ay dolanırken aydınlık yüzünün Dünya'dan farklı miktarlarda görülmesi","Ay'ın gerçekten büyüyüp küçülmesi","Ay'ın kendi ışığını artırıp azaltması"],a:1,e:"Evreler, aydınlık yüzün Dünya'dan görünen miktarının değişmesiyle oluşur."},
+ {n:17,q:"Ay'ın aydınlık yüzünün tamamının Dünya'dan göründüğü evre hangisidir?",o:["Yeni Ay","İlk dördün","Dolunay","Hilal"],a:2,e:"Dolunayda aydınlık yüzün tamamı görünür."},
+ {n:18,q:"Yeni Ay evresinde Ay'ın Dünya'dan görünmemesinin nedeni nedir?",o:["Ay'ın o gün yok olması","Ay'ın aydınlık yüzünün Güneş'e, karanlık yüzünün Dünya'ya bakması","Ay'ın Dünya'nın gölgesine girmesi","Ay'ın ışık üretmeyi bırakması"],a:1,e:"Yeni Ay'da Dünya'ya bakan yüz karanlıktır."},
+ {n:19,q:"Ay'ın bir evre döngüsünü tamamlaması yaklaşık kaç gün sürer?",o:["7 gün","15 gün","29,5 gün","365 gün"],a:2,e:"Evre döngüsü yaklaşık 29,5 gündür."},
+ {n:20,q:"Aşağıdaki evrelerden hangisi, yeni Ay evresinden sonra ve dolunay evresinden önce gelir?",o:["Son dördün","Son hilal","İlk dördün","Yeni Ay"],a:2,e:"Sıra: yeni Ay, ilk hilal, ilk dördün, şişkin Ay, dolunay."},
+ {n:21,q:"Bir öğrenci el fenerini Güneş'i, topu Ay'ı, kendini de Dünya'yı temsil edecek şekilde bir model hazırlıyor. Topu fenere göre farklı konumlara getirirse ne gözlemler?",o:["Topun boyutunun değiştiğini","Topun görünen aydınlık kısmının değiştiğini","Topun renginin değiştiğini","Topun kendi ışığını üretmeye başladığını"],a:1,e:"Topun yarısı hep aydınlıktır; görünen kısım konuma göre değişir."},
+ {n:22,q:"Evreler ile Güneş, Dünya ve Ay'ın konumları ilgili aşağıdaki ifadelerden hangisi doğrudur?",o:["Dolunayda Ay, Dünya ile Güneş arasındadır.","Yeni Ay evresinde Ay, Dünya ile Güneş arasında yer alır.","Yeni Ay evresinde Dünya, Güneş ile Ay arasında yer alır.","Dolunayda Ay, Güneş'in arkasında kalır."],a:1,e:"Yeni Ay'da Ay, Dünya ile Güneş arasındadır."},
+ {n:23,q:"Aşağıdaki ifadelerden hangisi yanlıştır?",o:["Ay'ın her zaman yarısı Güneş tarafından aydınlatılır.","Ay'ın evreleri düzenli olarak tekrar eder.","Ay evreler boyunca gerçekten küçülüp büyür.","Dolunayda aydınlık yüzün tamamı görünür."],a:2,e:"Ay'ın boyutu değişmez; yalnızca görünen aydınlık kısım değişir."},
+ {n:108,q:"İlk dördün evresinde Ay Dünya'dan nasıl görünür?",o:["Hiç görünmez.", "Yarım daire şeklinde görünür.", "Tamamı aydınlık görünür.", "Çok ince bir hilal şeklinde görünür."],a:1,e:"İlk dördünde Ay'ın yarım dairesi görünür."},
+ {n:109,q:"Dolunay evresinden sonra Ay'ın Dünya'dan görünen aydınlık kısmı nasıl değişir?",o:["Gittikçe büyür.", "Gittikçe küçülür.", "Hiç değişmez.", "Bir anda tamamen kaybolur."],a:1,e:"Dolunaydan sonra aydınlık kısım küçülür; Ay son dördün ve son hilal evrelerinden geçer."}
+ ],open:[{n:24,q:"Evde bulabileceğin malzemelerle Ay'ın evrelerini gösteren bir model tasarla. Malzemelerini yaz, hangisinin neyi temsil ettiğini belirt ve gözlemini anlat.",a:"El feneri Güneş'i, top Ay'ı, öğrenci Dünya'yı temsil eder. Top fenere göre farklı konumlara getirilince topun aydınlık kısmının görünüşü değişir; bu, Ay'ın evrelerine benzer."}]},
+{id:"g4",name:"FB.5.1.4 Model",cls:"c-earth",qs:[
+ {n:25,q:"Güneş, Dünya ve Ay'ın büyüklükleri karşılaştırıldığında hangi sıralama doğrudur?",o:["Ay > Dünya > Güneş","Dünya > Güneş > Ay","Güneş > Dünya > Ay","Güneş > Ay > Dünya"],a:2,e:"Güneş > Dünya > Ay."},
+ {n:26,q:"Dünya'nın kendi ekseni etrafında dönmesinin sonucu aşağıdakilerden hangisidir?",o:["Ay'ın evrelerinin oluşması","Gece ve gündüzün oluşması","Güneş'in küçülmesi","Ay'ın hep aynı yüzünün görünmesi"],a:1,e:"Dünya'nın dönmesi gece ve gündüzü oluşturur."},
+ {n:27,q:"Dünya'nın Güneş'in çevresinde bir tam tur atması yaklaşık ne kadar sürer?",o:["24 saat","27 gün","29,5 gün","365 gün 6 saat"],a:3,e:"Dolanma süresi yaklaşık 365 gün 6 saattir."},
+ {n:28,q:"Aşağıdaki ifadelerden hangisi Güneş, Dünya ve Ay'ın hareketlerini doğru anlatır?",o:["Güneş, Dünya'nın çevresinde dolanır.","Ay, Dünya'nın çevresinde; Dünya ise Güneş'in çevresinde dolanır.","Dünya, Ay'ın çevresinde dolanır.","Ay, yalnızca Güneş'in çevresinde dolanır."],a:1,e:"Ay Dünya'nın, Dünya da Güneş'in çevresinde dolanır."},
+ {n:29,q:"Dünya 1 cm çaplı bir boncukla gösterilirse Güneş'i temsil eden küre yaklaşık kaç cm çaplı olmalıdır?",o:["4 cm","27 cm","109 cm","1300 cm"],a:2,e:"Güneş'in çapı Dünya'nın yaklaşık 109 katıdır."},
+ {n:30,q:"Aynı modelde Dünya 1 cm ise Ay'ı temsil eden boncuk yaklaşık ne kadar olmalıdır?",o:["0,3 cm","3 cm","10 cm","109 cm"],a:0,e:"Ay'ın çapı Dünya'nın yaklaşık 0,27 katıdır; yani yaklaşık 0,3 cm."},
+ {n:31,q:"Güneş, Dünya ve Ay'ı küçük toplarla gösteren bir model için aşağıdakilerden hangisi söylenebilir?",o:["Model gerçeğin birebir kopyasıdır.","Model, büyüklük ve hareketleri anlamayı kolaylaştırır ama gerçeğin bazı yönlerinden farklı olabilir.","Model gerçeği hiç yansıtmadığı için kullanılamaz.","Model yalnızca Güneş'i gösterir."],a:1,e:"Model gerçeği anlamayı kolaylaştırır ama sınırlılıkları vardır."},
+ {n:110,q:"Dünya'nın kendi ekseni etrafında bir tam tur dönmesi yaklaşık kaç saat sürer?",o:["12 saat", "24 saat", "27 saat", "365 saat"],a:1,e:"Dünya'nın dönme süresi yaklaşık 24 saattir; gece ve gündüz bu hareketle oluşur."},
+ {n:111,q:"Dünya'nın hacminin içine yaklaşık kaç tane Ay sığar?",o:["5", "50", "500", "5 000"],a:1,e:"Dünya'nın içine yaklaşık 50 Ay sığar."},
+ {n:112,q:"Bir modelde Güneş 1 metre çaplı bir topla gösteriliyorsa aynı ölçekte Dünya yaklaşık ne büyüklükte olmalıdır?",o:["1 santimetre", "10 santimetre", "50 santimetre", "1 metre"],a:0,e:"Güneş'in çapı Dünya'nın yaklaşık 109 katıdır; 1 m'nin 109'da biri yaklaşık 1 cm eder."}
+ ],open:[{n:32,q:"Güneş, Dünya ve Ay'ı küçük cisimlerle gösteren bir model çiz. Cisimlerin büyüklük sırasını belirt ve hareketlerini oklarla göster.",a:"Model, büyükten küçüğe Güneş, Dünya ve Ay'ı içermelidir. Dünya ile Ay'ın kendi eksenlerinde döndüğü, Ay'ın Dünya'nın, Dünya'nın da Güneş'in çevresinde dolandığı oklarla gösterilmelidir."}]}
+];
+var Y={"g1": [{"n": 33, "c": "Ayşe, filtreli gözlükle Güneş'i incelerken yüzeyde koyu bir leke fark etti. Üç gün boyunca aynı lekeyi izledi. Leke her gün biraz daha sağa kaydı.", "q": "Ayşe'nin gözlemi Güneş hakkında hangi sonuca ulaşmamızı sağlar? Nedenini açıkla.", "p": ["Ayşe'nin gözlemi Güneş'in kendi ekseni etrafında döndüğünü gösterir.", "Leke Güneş'in yüzeyinde olduğu için Güneş döndükçe lekenin yeri değişir ve her gün biraz daha sağa kayar.", "Bu yüzden lekelerin kayması Güneş'in döndüğünün kanıtıdır."]}, {"n": 34, "c": "Tabloda Güneş'in iki bölümünün sıcaklığı verilmiştir.\nÇekirdek: yaklaşık 15 000 000 °C\nYüzey: yaklaşık 5 500 °C", "q": "Tabloya bakarak Güneş'in en sıcak bölümünün neresi olduğunu yaz. Bu bölümün Güneş için önemini yorumla.", "p": ["Tabloya göre Güneş'in en sıcak bölümü çekirdektir.", "Çekirdeğin sıcaklığı yaklaşık 15 milyon °C, yüzeyin sıcaklığı yaklaşık 5 500 °C'dir. Güneş'in enerjisi çekirdekte üretilir.", "Çekirdek, Güneş'in ışık ve ısı kaynağıdır."]}, {"n": 35, "c": "Güneş'ten çıkan ışık Dünya'ya yaklaşık 8 dakikada ulaşır.", "q": "Güneş bir anda sönseydi Dünya'dan bakan biri bunu ne zaman fark ederdi? Düşüncenin gerekçesini yaz.", "p": ["Bunu yaklaşık 8 dakika sonra fark ederdi.", "Güneş'ten çıkan ışığın Dünya'ya ulaşması yaklaşık 8 dakika sürer. Son çıkan ışık yoldayken Güneş hâlâ görünür.", "Işığın yolculuk süresi yüzünden değişiklik Dünya'dan 8 dakika sonra fark edilirdi."]}, {"n": 36, "c": "Bilim insanları Güneş'in ekvator bölgesinin yaklaşık 25 günde, kutuplara yakın bölgelerinin ise 30 günden uzun sürede bir tur attığını belirlemiştir.", "q": "Bu veriye bakarak Güneş'in yapısı hakkında nasıl bir çıkarım yapabilirsin?", "p": ["Bu veriden Güneş'in katı bir cisim olmadığı sonucunu çıkarırım.", "Ekvator yaklaşık 25 günde, kutuplara yakın bölgeler 30 günden uzun sürede bir tur atıyor. Katı olsaydı her bölgesi aynı sürede dönerdi.", "Demek ki Güneş sıcak gazlardan oluşur."]}, {"n": 37, "c": "Ali: \"Güneş bir gezegendir, çünkü Dünya'ya ışık verir.\"", "q": "Ali'nin düşüncesini bilimsel olarak değerlendir. Doğru mu, yanlış mı? Gerekçeni yaz.", "p": ["Ali'nin düşüncesi yanlıştır.", "Güneş bir gezegen değil yıldızdır, çünkü kendi ışık ve ısısını üretir. Gezegenler kendi ışıklarını üretmez, Güneş'ten gelen ışığı yansıtır.", "Işık vermesi Güneş'in gezegen değil yıldız olduğunu gösterir."]}, {"n": 38, "c": "Tabloda iki gök cisminin çapı verilmiştir.\nGüneş: yaklaşık 1 390 000 km\nDünya: yaklaşık 12 742 km", "q": "Tablodaki verilere göre Güneş'in çapı Dünya'nın çapının yaklaşık kaç katıdır? Sonucu yorumla.", "p": ["Güneş'in çapı Dünya'nın çapının yaklaşık 109 katıdır.", "1 390 000 ÷ 12 742 işleminin sonucu yaklaşık 109 eder.", "Yani Güneş, Dünya'dan çok daha büyük bir gök cismidir."]}, {"n": 39, "c": "Zeynep, Güneş lekelerini daha iyi görmek için dürbünle doğrudan Güneş'e bakmak istiyor. Arkadaşı Mert onu uyarıyor.", "q": "Mert neden haklıdır? Zeynep lekeleri güvenli biçimde nasıl inceleyebilir?", "p": ["Mert haklıdır.", "Güneş'e doğrudan ya da dürbünle bakmak gözlere kalıcı zarar verir. Zeynep özel filtreli gözlükle ya da projeksiyon yöntemiyle lekeleri güvenle inceleyebilir.", "Güneş gözlemi her zaman güvenli yöntemlerle yapılmalıdır."]}, {"n": 40, "c": "Güneş lekeleri, Güneş yüzeyinde çevresine göre daha koyu görünen bölgelerdir. Bu bölgelerin sıcaklığı çevresinden daha düşüktür.", "q": "Güneş lekeleri neden koyu görünür? Yorumla.", "p": ["Güneş lekeleri çevresinden daha soğuk olduğu için koyu görünür.", "Daha soğuk bölgeler daha az ışık yayar. Çevresindeki parlak yüzey daha çok ışık verdiği için lekeler koyu kalır.", "Lekelerin koyu görünmesinin nedeni düşük sıcaklıklarıdır."]}, {"n": 41, "c": "Mert: \"Güneş geceleri sönüyor, çünkü gece gökyüzünde Güneş'i göremiyoruz.\"", "q": "Mert'in düşüncesine katılıyor musun? Gece ve gündüzün nasıl oluştuğunu da kullanarak açıkla.", "p": ["Mert'in düşüncesine katılmıyorum.", "Güneş sönmez, sürekli ışık üretir. Dünya kendi ekseni etrafında dönerken Güneş'e bakmayan yüzünde gece olur.", "Geceleri Güneş'i göremememiz Dünya'nın dönmesinden kaynaklanır."]}, {"n": 42, "c": "Bitkiler büyümek için ışığa ihtiyaç duyar. Canlılar da yaşamak için ısıya ve besine ihtiyaç duyar.", "q": "Güneş olmasaydı Dünya'da neler olurdu? Birbiriyle ilişkili iki sonuç yaz.", "p": ["Güneş olmasaydı Dünya'da ışık ve ısı olmazdı.", "Dünya çok soğurdu. Bitkiler ışık olmadan besin üretemez, besin zinciri bozulur ve canlılar yaşayamazdı.", "Güneş, Dünya'daki yaşamın temel enerji kaynağıdır."]}], "g2": [{"n": 43, "c": "Tabloda Dünya ve Ay'ın yer çekimi karşılaştırılmıştır.\nDünya: 1 birim\nAy: Dünya'nın yaklaşık altıda biri", "q": "Bir astronot Ay'da zıpladığında Dünya'dakinden daha yükseğe çıkar. Bunun nedenini yorumla.", "p": ["Ay'ın yer çekimi Dünya'dan daha azdır.", "Ay'ın yer çekimi Dünya'nın yaklaşık altıda biri kadardır. Bu yüzden astronot kendini daha hafif hisseder.", "Bu nedenle Ay'da Dünya'dakinden daha yükseğe zıplar."]}, {"n": 44, "c": "Ay'a inen astronotların bıraktığı ayak izleri, yıllar sonra bile bozulmadan durmaktadır.", "q": "Ay'daki ayak izleri neden uzun süre kalıcıdır? Ay'ın özelliklerinden yararlanarak açıkla.", "p": ["Ayak izleri Ay'da uzun süre kalıcıdır.", "Ay'da atmosfer olmadığı için rüzgâr ve yağmur yoktur. İzleri silecek bir etki bulunmaz.", "Atmosferin olmaması izlerin bozulmadan kalmasını sağlar."]}, {"n": 45, "c": "Deniz: \"Dünya'dan Ay'ın hep aynı yüzü göründüğüne göre Ay hiç dönmüyor.\"", "q": "Deniz'in düşüncesini değerlendir. Ay'ın hareketleriyle gerekçelendir.", "p": ["Deniz'in düşüncesi yanlıştır.", "Ay kendi ekseni etrafında döner. Dönme süresi ile Dünya çevresinde dolanma süresi yaklaşık eşit olduğu için (27,3 gün) hep aynı yüzünü görürüz.", "Hep aynı yüzü görmemiz Ay'ın dönmediğini değil, bu iki sürenin eşit olduğunu gösterir."]}, {"n": 46, "c": "Ay yüzeyinin sıcaklığı gündüz yaklaşık 127 °C'ye çıkar, gece yaklaşık –173 °C'ye düşer.", "q": "Ay'da gece ile gündüz arasındaki sıcaklık farkı Dünya'dakinden çok daha fazladır. Bunun nedenini yorumla.", "p": ["Ay'da gece ile gündüz arasındaki sıcaklık farkı çok fazladır, çünkü Ay'ın atmosferi yoktur.", "Atmosfer ısıyı tutar ve dengeler. Ay'da atmosfer olmadığı için gündüz yüzey çok ısınır, gece çok soğur.", "Dünya'da atmosfer olduğu için bu fark daha azdır."]}, {"n": 47, "c": "Ay yüzeyi kraterlerle doludur. Dünya yüzeyinde ise Ay'a göre çok daha az krater görülür.", "q": "Bu farkın nedeni ne olabilir? İki neden yaz.", "p": ["Bu farkın iki nedeni vardır.", "Dünya'nın atmosferi göktaşlarının çoğunu yakar. Ayrıca rüzgâr, yağmur ve su kraterleri zamanla aşındırır. Ay'da bunlar yoktur.", "Bu yüzden Ay'da kraterler korunur, Dünya'da çok az görülür."]}, {"n": 48, "c": "Elif: \"Ay geceleri yıldızlar gibi kendi ışığıyla parlıyor.\"", "q": "Elif'in söylediğini düzelt. Ay'ın parlak görünmesini açıkla.", "p": ["Elif'in söylediği yanlıştır.", "Ay'ın kendi ışığı yoktur. Güneş'ten gelen ışığı yansıtır.", "Ay parlak görünür, çünkü Güneş ışığını yansıtır."]}, {"n": 49, "c": "Ece sınıfın ortasında duruyor. Arkadaşı Can, yüzü hep Ece'ye dönük olacak şekilde Ece'nin çevresinde yürüyor.", "q": "Can'ın hareketi Ay'ın hangi hareketine benzer? Can'ın hem Ece'nin çevresinde yürümesi hem de kendi etrafında dönmesi neyi temsil eder?", "p": ["Can'ın hareketi Ay'ın hareketlerine benzer.", "Ece'nin çevresinde yürümesi dolanmayı, kendi etrafında dönmesi dönmeyi temsil eder. Yüzünün hep Ece'ye dönük olması, Ay'ın hep aynı yüzünün görünmesine benzer.", "Bu örnek, Ay'ın dönme ve dolanma sürelerinin eşit olduğunu gösterir."]}, {"n": 50, "c": "Gözlem: Ay yüzeyinde bulut, yağmur ya da rüzgâr izi görülmez.", "q": "Bu gözlemden nasıl bir çıkarım yapılabilir? Çıkarımının gerekçesini yaz.", "p": ["Ay'da atmosfer olmadığı sonucuna varırım.", "Bulut, yağmur ve rüzgâr gibi hava olayları atmosferde oluşur. Ay'da görülmemeleri atmosfer olmadığını gösterir.", "Bu gözlem, Ay'da atmosfer olmadığının kanıtıdır."]}, {"n": 51, "c": "Astronotlar Ay'da yürürken özel kıyafet ve oksijen tüpü kullanır.", "q": "Astronotların neden özel kıyafete ve oksijen tüpüne ihtiyaç duyduğunu Ay'ın özelliklerine dayanarak açıkla.", "p": ["Astronotlar Ay'da özel kıyafet ve oksijen tüpü kullanır, çünkü Ay'daki koşullar yaşama uygun değildir.", "Ay'da atmosfer, yani soluyacak hava yoktur. Sıcaklık gündüz çok yüksek, gece çok düşüktür. Kıyafet astronotu bu koşullardan korur.", "Bu ekipmanlar astronotların yaşaması için gereklidir."]}, {"n": 52, "c": "Ay'ın Dünya'dan hiç görünmeyen yüzü, ancak uzay araçları Ay'ın çevresinde dolaştığında fotoğraflanabilmiştir.", "q": "Dünya'dan Ay'ın diğer yüzünü neden hiç göremiyoruz?", "p": ["Dünya'dan Ay'ın diğer yüzünü göremeyiz.", "Ay'ın dönme süresi ile Dünya çevresinde dolanma süresi yaklaşık eşittir. Bu yüzden Ay Dünya'ya hep aynı yüzünü çevirir.", "Diğer yüzü ancak uzay araçları Ay'ın çevresinde dolaştığında görülebilmiştir."]}], "g3": [{"n": 53, "c": "Tabloda Ay'ın bir evre döngüsündeki görünümü verilmiştir.\n1. gün: Yeni Ay\n7. gün: İlk dördün\n15. gün: Dolunay\n22. gün: Son dördün\n29-30. gün: Yeni Ay", "q": "Tabloya göre bir evre döngüsü yaklaşık kaç gün sürer? Dolunaydan sonra Ay'ın aydınlık kısmı nasıl değişir?", "p": ["Bir evre döngüsü yaklaşık 29-30 gün sürer.", "Tabloda yeni Ay'dan tekrar yeni Ay'a yaklaşık 29-30 gün geçiyor. Dolunaydan sonra aydınlık kısım küçülür ve Ay son dördün ile son hilal evrelerinden geçer.", "Evreler düzenli olarak bu sırayla tekrar eder."]}, {"n": 54, "c": "Burak: \"Ay'ın evreleri, Dünya'nın gölgesi Ay'ın bir kısmını örttüğü için oluşur.\"", "q": "Burak'ın düşüncesini değerlendir. Evrelerin gerçek nedenini yaz.", "p": ["Burak'ın düşüncesi yanlıştır.", "Evreler Dünya'nın gölgesinden oluşmaz. Ay dolanırken aydınlık yüzünün Dünya'dan görünen kısmı değiştiği için evreler oluşur.", "Evrelerin nedeni, görünen aydınlık kısmın değişmesidir."]}, {"n": 55, "c": "Bir öğrenci evrelerin modelini yapıyor. El fenerini Güneş, topu Ay olarak kullanıyor. Topun her zaman yarısının aydınlık olduğunu görüyor.", "q": "Modelde topun yarısının hep aydınlık olması gerçekte neyi temsil eder?", "p": ["Topun yarısının aydınlık olması, Ay'ın yarısının her zaman Güneş'ten ışık aldığını temsil eder.", "Top fenere göre farklı konumlara getirildikçe öğrenci aydınlık yarının farklı bölümlerini görür.", "Evreleri, aydınlık yarının ne kadarını gördüğümüz belirler."]}, {"n": 56, "c": "Bir modelde Ay, Dünya ile Güneş'in arasındadır ve Ay'ın Güneş'e bakan yüzü aydınlıktır.", "q": "Dünya'dan bakan biri bu durumda Ay'ı hangi evrede görür? Nedenini açıkla.", "p": ["Dünya'dan bakan kişi Ay'ı yeni Ay evresinde görür.", "Ay, Dünya ile Güneş'in arasındadır. Aydınlık yüzü Güneş'e, karanlık yüzü Dünya'ya bakar.", "Bu yüzden Ay neredeyse hiç görünmez."]}, {"n": 57, "c": "Bu ayın 1'inde dolunay vardı.", "q": "Bir sonraki dolunay yaklaşık ne zaman görülür? Gerekçeni evre döngüsünün süresiyle açıkla.", "p": ["Bir sonraki dolunay yaklaşık 29-30 gün sonra görülür.", "Evre döngüsü yaklaşık 29,5 gün sürer ve evreler düzenli olarak tekrar eder.", "Yani bir sonraki dolunay, bir sonraki ayın başında olur."]}, {"n": 58, "c": "Ayla bir akşam gökyüzünde çok ince bir Ay kenarı gördü. Bir gece önce Ay hiç görünmüyordu.", "q": "Ayla hangi evreyi gözlemlemiş olabilir? Önümüzdeki günlerde Ay'ın görünümü nasıl değişir?", "p": ["Ayla ilk hilal evresini gözlemlemiştir.", "Bir gece önce Ay görünmediği için yeni Ay'dan hemen sonraki evredir. Aydınlık kısım her gün büyür.", "Önümüzdeki günlerde ilk dördünü, sonra dolunaya doğru ilerleyen evreleri görecektir."]}, {"n": 59, "c": "Bir öğrenci modelde fener, kendisi ve topu şu sırada yerleştirdi: Fener — Öğrenci — Top. Fenerin ışığı öğrencinin başının üstünden topa ulaşıyor ve öğrenci topun aydınlık yüzünü görüyor.", "q": "Bu durum Ay'ın hangi evresini gösterir? Neden?", "p": ["Bu durum dolunay evresini gösterir.", "Fener, öğrenci ve top bu sırada olduğunda ışık topun öğrenciye bakan yüzünü aydınlatır. Ay, Dünya'nın Güneş'e göre diğer tarafındadır.", "Aydınlık yüzün tamamı göründüğü için bu evre dolunaydır."]}, {"n": 60, "c": "Dört evre kartı karışık verilmiştir: Dolunay, Yeni Ay, Son hilal, İlk dördün.", "q": "Kartları Ay'ın döngüsündeki doğru sıraya diz ve ilk dördün evresini kısaca anlat.", "p": ["Doğru sıra: Yeni Ay, İlk dördün, Dolunay, Son hilal.", "İlk dördünde Ay'ın yarım dairesi görünür ve aydınlık kısım büyümektedir.", "Bu sıra evre döngüsünün büyüyen ve küçülen bölümlerini gösterir."]}, {"n": 61, "c": "Fener ile topun aralarındaki mesafe 3 metre, top ile öğrencinin gözü arasındaki mesafe ise 50 cm'dir. Gerçekte bu mesafeler çok daha büyüktür.", "q": "Evre modelinin gerçeklikten farklı olan iki yönünü yaz.", "p": ["Modelin gerçekten farklı olan iki yönü vardır.", "Büyüklükler ve uzaklıklar gerçek ölçekte değildir. Ayrıca Ay'ın kendi dönmesi ve Güneş'in gerçek büyüklüğü modelde yoktur.", "Model anlamayı kolaylaştırır ama gerçeğin kendisi değildir."]}, {"n": 62, "c": "Ece 5 gün boyunca Ay'ı gözlemledi. İlk gün ince bir kenar gördü; her gün aydınlık kısım biraz daha genişledi.", "q": "Ece'nin gözlemlediği evre hangisidir? Birkaç gün sonra hangi evreyi görmesini beklersin?", "p": ["Ece ilk hilal evresini gözlemlemiştir.", "İnce bir kenarın her gün genişlemesi, aydınlık kısmın büyüdüğünü gösterir.", "Birkaç gün sonra ilk dördün evresini görmesi beklenir."]}], "g4": [{"n": 63, "c": "Tabloda üç gök cisminin çapı verilmiştir.\nGüneş: yaklaşık 1 390 000 km\nDünya: yaklaşık 12 742 km\nAy: yaklaşık 3 474 km", "q": "Gök cisimlerini büyükten küçüğe sırala. Ay'ın çapı Dünya'nın çapının yaklaşık kaçta kaçıdır?", "p": ["Büyükten küçüğe sıralama: Güneş, Dünya, Ay.", "Çaplar 1 390 000 km, 12 742 km ve 3 474 km'dir. Ay'ın çapı Dünya'nın çapının yaklaşık dörtte biri kadardır (3 474 ÷ 12 742 ≈ 0,27).", "En büyük gök cismi Güneş, en küçüğü Ay'dır."]}, {"n": 64, "c": "Mehmet, modelinde Güneş'i 10 cm, Dünya'yı 5 cm çaplı toplarla göstermiş.", "q": "Mehmet'in modelini büyüklük oranları bakımından değerlendir. Nasıl düzeltmelisin?", "p": ["Mehmet'in modelinde büyüklük oranları yanlıştır.", "Gerçekte Güneş'in çapı Dünya'nın yaklaşık 109 katıdır. Modelde ise yalnızca 2 kat gösterilmiştir.", "Güneş çok daha büyük, Dünya çok daha küçük gösterilerek model düzeltilmelidir."]}, {"n": 65, "c": "Aylin, Güneş, Dünya ve Ay'ı hem gerçek büyüklükleri hem de gerçek uzaklıklarıyla bir kâğıda çizmeye çalışıyor ama başaramıyor.", "q": "Aylin neden zorlanıyor? Çözüm olarak ne yapabilir?", "p": ["Aylin'in zorlanmasının nedeni gök cisimlerinin çok büyük ve çok uzak olmasıdır.", "Hem büyüklükleri hem uzaklıkları aynı kâğıda gerçek ölçekle sığdırmak mümkün değildir.", "Küçük bir ölçek kullanabilir ya da uzaklıkları ölçeksiz bırakıp hareketleri oklarla gösterebilir."]}, {"n": 66, "c": "Tabloda hareketlerin süreleri verilmiştir.\nDünya'nın kendi ekseninde dönmesi: yaklaşık 24 saat\nDünya'nın Güneş'in çevresinde dolanması: yaklaşık 365 gün 6 saat\nAy'ın Dünya'nın çevresinde dolanması: yaklaşık 27,3 gün", "q": "Hangi hareket gece ve gündüzün oluşmasına neden olur? Gerekçeni yaz.", "p": ["Gece ve gündüzün oluşmasına Dünya'nın kendi ekseni etrafında dönmesi neden olur.", "Dünya yaklaşık 24 saatte bir kez döner. Güneş'e bakan yüzünde gündüz, bakmayan yüzünde gece olur.", "Bu yüzden gece ve gündüz her gün sırayla tekrar eder."]}, {"n": 67, "c": "Dünya, Güneş'in çevresinde bir tam turu yaklaşık 1 yılda tamamlar.", "q": "Dünya 3 yılda Güneş'in çevresinde yaklaşık kaç tur atar? Ay bu sürede Dünya ile birlikte neyi yapar?", "p": ["Dünya 3 yılda Güneş'in çevresinde yaklaşık 3 tur atar.", "Bir tur yaklaşık 1 yıl sürer. Ay bu sürede Dünya'nın çevresinde dolanmaya devam eder ve Dünya ile birlikte Güneş'in çevresinde ilerler.", "Yani Ay hem Dünya'nın çevresinde dolanır hem de Dünya ile birlikte Güneş'in çevresinde ilerler."]}, {"n": 68, "c": "Deniz: \"Güneş her gün doğudan doğup batıdan batıyor, öyleyse Güneş Dünya'nın çevresinde dolanıyor.\"", "q": "Deniz'in düşüncesini bilimsel olarak değerlendir.", "p": ["Deniz'in düşüncesi yanlıştır.", "Güneş'in doğudan doğup batıdan batması görünür bir harekettir ve Dünya'nın kendi ekseni etrafında dönmesinden kaynaklanır.", "Gerçekte Dünya, Güneş'in çevresinde dolanır."]}, {"n": 69, "c": "Dünya bir yılda Güneş'in çevresinde bir tur atar. Ay'ın Dünya'nın çevresinde bir tur atma süresi yaklaşık 27,3 gündür. Bir yıl yaklaşık 365 gündür.", "q": "Ay bir yılda Dünya'nın çevresinde yaklaşık kaç tur atar? İşlemini göster.", "p": ["Ay bir yılda Dünya'nın çevresinde yaklaşık 13 tur atar.", "Bir yıl yaklaşık 365 gün, Ay'ın bir turu yaklaşık 27,3 gündür. 365 ÷ 27,3 işleminin sonucu yaklaşık 13 eder.", "Yani Ay bir yılda yaklaşık 13 tur tamamlar."]}, {"n": 70, "c": "Bir öğrenci modelinde Ay'ın Güneş'in çevresinde, Güneş'in de Dünya'nın çevresinde dolandığını oklarla göstermiştir.", "q": "Modeldeki hatalı bilgileri bul ve doğru hâlini yaz.", "p": ["Modelde iki hata vardır.", "Ay, Güneş'in değil Dünya'nın çevresinde dolanır. Güneş de Dünya'nın çevresinde dolanmaz, Dünya Güneş'in çevresinde dolanır.", "Doğru model: Ay Dünya'nın çevresinde, Dünya ise Güneş'in çevresinde dolanır."]}, {"n": 71, "c": "Bilim insanları gök cisimlerini incelemek için çoğunlukla modeller kullanır.", "q": "Modellerin kullanılmasının iki nedenini yaz. Modellerin bir sınırlılığını belirt.", "p": ["Bilim insanları modelleri iki nedenle kullanır.", "Gök cisimleri çok büyük ve uzaktır, küçültülerek incelenebilir. Hareketler modelle daha kolay anlaşılır. Ancak model gerçeğin kendisi değildir; boyut ve uzaklıklar gerçeğe tam uymayabilir.", "Model yararlıdır ama sınırlılıkları vardır."]}, {"n": 72, "c": "Güneş'in içine yaklaşık 1,3 milyon Dünya sığar. Dünya'nın içine ise yaklaşık 50 Ay sığar.", "q": "Bu bilgiler Güneş, Dünya ve Ay'ın hacimleri hakkında ne söyler? Bir sıralama yaz.", "p": ["Hacim sıralaması Güneş > Dünya > Ay şeklindedir.", "Güneş'in içine yaklaşık 1,3 milyon Dünya, Dünya'nın içine ise yaklaşık 50 Ay sığar.", "Güneş en büyük hacimli, Ay en küçük hacimli gök cismidir."]}]};
+var DN={},_i=0;G.forEach(function(g){g.qs.forEach(function(q){DN[q.n]=++_i})});G.forEach(function(g){g.open.forEach(function(q){DN[q.n]=++_i})});G.forEach(function(g){(Y[g.id]||[]).forEach(function(q){DN[q.n]=++_i})});
+var PARTS=[{t:'Giriş',h:'Soruya kısa bir cevapla başla.',p:'Örn: Bence … / … sonucuna varırım.',r:2},{t:'Gelişme',h:'Nedenini, gözlemini ya da verini anlat.',p:'Örn: Çünkü … / Tabloya göre …',r:4},{t:'Sonuç',h:'Cevabını tek cümleyle bitir.',p:'Örn: Sonuç olarak … / Demek ki …',r:2}];
+var TOTAL=40,state={},cur=0;
+var tabsEl=document.getElementById("tabs"),panel=document.getElementById("panel");
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function counts(){
+  var ok=0,bad=0;
+  Object.keys(state).forEach(function(k){var g=state[k];if(g.ok)ok++;else bad++;});
+  document.getElementById("sOk").textContent="Doğru: "+ok;
+  document.getElementById("sBad").textContent="Yanlış: "+bad;
+  document.getElementById("sAll").textContent=(ok+bad)+" / "+TOTAL;
+  document.getElementById("barFill").style.width=((ok+bad)/TOTAL*100)+"%";
+  G.forEach(function(g,i){
+    var d=0;g.qs.forEach(function(q){if(state[q.n])d++});
+    var t=tabsEl.children[i];if(t)t.querySelector("small").textContent=d+"/"+g.qs.length;
+  });
+}
+function buildTabs(){
+  tabsEl.innerHTML="";
+  var tc={c0:"--sun",c1:"--moon",c2:"--violet",c3:"--earth"},on=["--on-sun","--on-moon","--on-violet","--on-earth"],cv=["--sun","--moon","--violet","--earth"];
+  G.forEach(function(g,i){
+    var b=document.createElement("button");b.type="button";b.className="tab";b.setAttribute("role","tab");
+    b.style.setProperty("--tc","var("+cv[i]+")");b.style.setProperty("--ton","var("+on[i]+")");
+    b.innerHTML=esc(g.name)+"<small></small>";
+    b.addEventListener("click",function(){cur=i;render()});
+    tabsEl.appendChild(b);
+  });
+}
+function render(){
+  var g=G[cur];
+  for(var i=0;i<tabsEl.children.length;i++)tabsEl.children[i].setAttribute("aria-selected",i===cur?"true":"false");
+  panel.innerHTML="";
+  g.qs.forEach(function(q){
+    var d=document.createElement("div");d.className="q "+g.cls;
+    var st=state[q.n];
+    if(st)d.classList.add(st.ok?"done-ok":"done-bad");
+    var h='<h4><em>'+DN[q.n]+'</em>'+esc(q.q)+'</h4><div class="opts">';
+    q.o.forEach(function(o,j){
+      var cl="opt";
+      if(st){if(j===q.a)cl+=" right";else if(j===st.pick)cl+=" wrong";}
+      h+='<button type="button" class="'+cl+'" data-j="'+j+'"'+(st?" disabled":"")+'><b>'+"ABCD".charAt(j)+'</b><span>'+esc(o)+'</span></button>';
+    });
+    h+='</div>';
+    if(st)h+='<div class="why"><b>'+(st.ok?"Doğru! ":"Doğru cevap "+"ABCD".charAt(q.a)+". ")+'</b>'+esc(q.e)+'</div>';
+    d.innerHTML=h;
+    d.querySelectorAll(".opt").forEach(function(btn){
+      btn.addEventListener("click",function(){
+        var j=+btn.getAttribute("data-j");
+        state[q.n]={pick:j,ok:j===q.a};counts();render();
+      });
+    });
+    panel.appendChild(d);
+  });
+  g.open.forEach(function(q){
+    var d=document.createElement("details");d.className="open "+g.cls;
+    d.innerHTML='<summary><em>'+DN[q.n]+'</em>'+esc(q.q)+' <small style="color:var(--muted)">(Açık uçlu: önce düşün, sonra örnek cevaba bak)</small></summary><p class="ans">'+esc(q.a)+'</p>';
+    panel.appendChild(d);
+  });
+  var yh=document.createElement("h3");yh.textContent="Yoruma dayalı sorular";yh.className=g.cls;yh.style.marginTop="8px";yh.style.color="var(--c)";
+  var yn=document.createElement("p");yn.style.color="var(--muted)";yn.style.fontWeight="600";yn.style.marginTop="-8px";yn.textContent="Cevabını üç bölümde yaz: giriş, gelişme ve sonuç. Her bölüm kısa olabilir, önemli olan cevabı tam cümlelerle ve sırayla kurmak.";
+  panel.appendChild(yh);panel.appendChild(yn);
+  (Y[g.id]||[]).forEach(function(q){
+    var d=document.createElement("div");d.className="q yq "+g.cls;
+    var h='<h4><em>'+DN[q.n]+'</em>Yoruma dayalı soru</h4><div class="ctxbox">'+esc(q.c)+'</div><h4 class="ask">'+esc(q.q)+'</h4><div class="parts">';
+    PARTS.forEach(function(pt,k){
+      h+='<label class="part" for="yq'+q.n+'_'+k+'"><span class="plabel"><b>'+pt.t+'</b><small>'+pt.h+'</small></span><textarea id="yq'+q.n+'_'+k+'" rows="'+pt.r+'" placeholder="'+pt.p+'" data-n="'+q.n+'" data-k="'+k+'"></textarea></label>';
+    });
+    h+='</div><div class="yq-foot"><span class="wc" id="wc'+q.n+'">0 kelime</span><button type="button" class="reset show">Örnek cevabı göster</button></div><div class="sample" id="sm'+q.n+'" hidden></div>';
+    d.innerHTML=h;
+    var tas=d.querySelectorAll("textarea");
+    function count(){var t=0;tas.forEach(function(x){var v=x.value.trim();if(v)t+=v.split(/\s+/).length});d.querySelector(".wc").textContent=t+" kelime";}
+    tas.forEach(function(ta){
+      try{ta.value=localStorage.getItem("yq"+ta.dataset.n+"_"+ta.dataset.k)||"";}catch(e){}
+      ta.addEventListener("input",function(){try{localStorage.setItem("yq"+ta.dataset.n+"_"+ta.dataset.k,ta.value);}catch(e){}count();});
+    });
+    count();
+    var sm=d.querySelector(".sample"),btn=d.querySelector(".show");
+    sm.innerHTML='<b class="sh">Örnek cevap</b>'+PARTS.map(function(pt,k){return '<p><span class="tag">'+pt.t+'</span>'+esc(q.p[k])+'</p>';}).join("");
+    btn.addEventListener("click",function(){sm.hidden=!sm.hidden;btn.textContent=sm.hidden?"Örnek cevabı göster":"Örnek cevabı gizle";});
+    panel.appendChild(d);
+  });
+}
+document.getElementById("reset").addEventListener("click",function(){state={};counts();render();});
+buildTabs();counts();render();
+</script>
+
+</body></html>
