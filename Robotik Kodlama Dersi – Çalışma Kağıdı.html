@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Robotik Kodlama Dersi – Çalışma Kağıdı</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700;800&display=swap">
+<style>
+:root{--bg:#f3f6ff;--card:#fff;--ink:#1b2a4a;--mute:#52618a;--line:#d9e0f5;--c1:#ff6b6b;--c2:#ffb703;--c3:#2ec4a6;--c4:#3a86ff;--c5:#8b5cf6;--c6:#ff7eb6;--ok:#12a373;--bad:#e5484d;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1730;--card:#18234a;--ink:#eef2ff;--mute:#a9b6e0;--line:#2c3a6b}}
+:root[data-theme="dark"]{--bg:#0f1730;--card:#18234a;--ink:#eef2ff;--mute:#a9b6e0;--line:#2c3a6b}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:600 18px/1.5 "Nunito",system-ui,sans-serif}
+h1,h2,h3{font-family:"Baloo 2","Nunito",system-ui,sans-serif;margin:0;line-height:1.1}
+.wrap{max-width:1040px;margin:0 auto;padding:16px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--c4);outline-offset:2px}
+.top{display:flex;gap:16px;align-items:center;background:var(--c4);color:#fff;border-radius:28px;padding:20px 24px;position:relative;overflow:hidden}
+.top h1{font-size:clamp(28px,5vw,48px);font-weight:800}
+.top p{margin:6px 0 0;font-weight:800;opacity:.92}
+.robot{font-size:clamp(64px,12vw,104px);background:none;border:0;line-height:1;transition:transform .2s}
+.robot:active{transform:rotate(-12deg) scale(1.15)}
+.bubble{position:absolute;right:18px;top:14px;background:#fff;color:#1b2a4a;border-radius:18px;padding:8px 14px;font-size:16px;max-width:46%;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.bar{display:flex;gap:12px;align-items:center;margin:14px 2px}
+.track{flex:1;height:16px;background:var(--line);border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--c3),var(--c2));border-radius:99px;transition:width .4s}
+.theme{border:2px solid var(--line);background:var(--card);border-radius:99px;padding:6px 14px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+nav a{color:#fff;text-decoration:none;border-radius:99px;padding:6px 14px;font-weight:800;font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.card{grid-column:span 6;background:var(--card);border-radius:24px;border:3px solid var(--tc,var(--line));overflow:hidden}
+.card.wide{grid-column:span 12}
+.card>h2{background:var(--tc);color:#fff;padding:12px 20px;font-size:23px}
+.body{padding:16px 20px 20px}
+.body p{margin:0 0 10px}
+b.k{color:var(--tc)}
+@media(max-width:760px){.card{grid-column:span 12}.bubble{position:static;max-width:none;margin-top:8px}.top{flex-wrap:wrap}}
+.steps{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px}
+.steps button{width:100%;text-align:left;background:var(--bg);border:2px solid var(--line);border-radius:16px;padding:10px 14px;display:flex;gap:10px;align-items:center}
+.steps button[aria-pressed=true]{background:var(--tc);color:#fff;border-color:var(--tc)}
+.steps i{font-style:normal;width:28px;height:28px;border-radius:50%;background:var(--card);color:var(--ink);display:grid;place-items:center;font-weight:800}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{border:2px solid var(--line);background:var(--bg);border-radius:99px;padding:8px 16px;font-weight:800}
+.chip[aria-pressed=true]{background:var(--tc);color:#fff;border-color:var(--tc);transform:scale(1.06)}
+.say{min-height:28px;margin-top:10px;color:var(--mute)}
+.shapes{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.shape{border:2px solid var(--line);background:var(--bg);border-radius:18px;padding:12px 8px;text-align:center}
+.shape.on{border-color:var(--tc);background:var(--card);box-shadow:0 5px 0 var(--tc)}
+.shape svg{width:100%;height:64px}
+.shape svg *{fill:var(--c2);stroke:var(--ink);stroke-width:3}
+.shape small{display:block;color:var(--mute)}
+.flows{display:flex;justify-content:center;padding:6px}
+.flows svg{width:150px;height:auto}
+.flows svg *{stroke:var(--ink);stroke-width:2.5;fill:var(--card)}
+.flows .f{fill:var(--c2);transition:fill .3s}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.flip{perspective:700px;background:none;border:0;height:96px;padding:0}
+.flip>span{display:block;position:relative;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flip.f>span{transform:rotateY(180deg)}
+.flip em,.flip strong{position:absolute;inset:0;display:grid;place-items:center;border-radius:18px;backface-visibility:hidden;font-style:normal;font-size:22px;border:3px solid var(--tc)}
+.flip em{background:var(--card);font-family:"Baloo 2",system-ui,sans-serif;font-weight:800}
+.flip strong{background:var(--tc);color:#fff;transform:rotateY(180deg)}
+.kbd{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.key{border:2px solid var(--line);border-bottom-width:6px;background:var(--bg);border-radius:14px;padding:8px 12px;text-align:left}
+.key b{display:block;font-family:"Baloo 2",system-ui,sans-serif;font-size:19px}
+.key span{font-size:15px;color:var(--mute);display:none}
+.key.on{border-color:var(--tc);background:var(--card)}
+.key.on span{display:block}
+.live{margin-top:12px;border:3px dashed var(--tc);border-radius:18px;padding:12px;text-align:center}
+.live big{font:800 34px "Baloo 2",system-ui,sans-serif;display:block}
+.pad{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.zone{user-select:none;touch-action:manipulation;border:3px solid var(--tc);background:var(--bg);border-radius:22px;padding:16px;text-align:center;min-height:150px;transition:transform .1s,background .2s}
+.zone.hit{background:var(--tc);color:#fff;transform:scale(.97)}
+.zone .ic{font-size:44px}
+.zone h3{font-size:22px}
+.zone p{margin:6px 0 0;font-size:16px}
+.q h3{font-size:22px;margin-bottom:12px}
+.opts{display:grid;gap:10px}
+.opts button{background:var(--bg);border:2px solid var(--line);border-radius:16px;padding:12px 16px;text-align:left}
+.opts button.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.opts button.no{background:var(--bad);border-color:var(--bad);color:#fff}
+.qf{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px;flex-wrap:wrap}
+.btn{background:var(--c5);color:#fff;border:0;border-radius:99px;padding:10px 22px;font-weight:800}
+.btn:disabled{opacity:.4}
+.end{text-align:center;padding:24px 10px;font:800 28px "Baloo 2",system-ui,sans-serif}
+.oq{border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:14px;background:var(--bg)}
+.oq h3{font-size:21px;margin-bottom:10px}
+.oq textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;resize:vertical;margin-bottom:10px}
+.cm{margin-top:12px;border-radius:16px;padding:12px 14px;background:var(--card);border:2px dashed var(--tc)}
+.cm .tag{display:inline-block;border-radius:99px;padding:2px 12px;margin:2px 4px 2px 0;font-size:15px;background:var(--line)}
+.cm .tag.y{background:var(--ok);color:#fff}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+ <button class="robot" id="robot" aria-label="Robota dokun">🤖</button>
+ <div><h1>Robotik Kodlama Dersi<br>Çalışma Kağıdı</h1><p>Sınav öncesi tekrar – dokun, dene, öğren!</p></div>
+ <div class="bubble" id="bub">Merhaba! Ben Robi. Kartlara dokun, birlikte tekrar edelim!</div>
+</header>
+<div class="bar"><span id="pt">0 / 7</span><div class="track"><div class="fill" id="fill"></div></div><button class="theme" id="theme">🌓 Tema</button></div>
+<nav id="nav"></nav>
+
+<main class="grid">
+<section class="card" id="s1" style="--tc:var(--c4)"><h2>1. Algoritma Nedir? Ne İşe Yarar?</h2><div class="body">
+<p><b class="k">Algoritma:</b> Bir problemi çözmek veya bir işi yapmak için izlenen sıralı adımlardır.</p>
+<p><b class="k">Ne işe yarar?</b> İşleri düzenli ve doğru bir sırayla yapmamızı sağlar.</p>
+<p><b>Örnek: Bir oyunu başlatma adımları</b> (sırayla dokun 👇)</p>
+<ol class="steps" id="algo"></ol><div class="say" id="algosay"></div></div></section>
+
+<section class="card" id="s2" style="--tc:var(--c3)"><h2>2. Bilgisayar Nedir? Ne İşe Yarar?</h2><div class="body">
+<p><b class="k">Bilgisayar:</b> Verileri alan, işleyen, saklayan ve sonuçları kullanıcıya sunan elektronik cihazdır.</p>
+<p><b>Ne işe yarar?</b> Dokunarak keşfet:</p>
+<div class="chips" id="pc"></div><div class="say" id="pcsay"></div></div></section>
+
+<section class="card" id="s3" style="--tc:var(--c5)"><h2>3. Akış Diyagramı Nedir? Ne İşe Yarar?</h2><div class="body">
+<p><b class="k">Akış diyagramı:</b> Bir algoritmanın şekiller ve oklar kullanılarak gösterilmesidir.</p>
+<p><b class="k">Ne işe yarar?</b> İşlem adımlarını görsel olarak anlamamızı ve takip etmemizi sağlar.</p>
+<div class="flows"><button class="theme" id="play">▶ Akışı çalıştır</button></div>
+<div class="flows"><svg viewBox="0 0 150 250" id="flow"><rect class="f" x="30" y="4" width="90" height="38" rx="19"/><path d="M75 42v20"/><rect class="f" x="25" y="62" width="100" height="40"/><path d="M75 102v20"/><path class="f" d="M75 122l48 32-48 32-48-32z"/><path d="M75 186v20"/><rect class="f" x="30" y="206" width="90" height="38" rx="19"/></svg></div></div></section>
+
+<section class="card" id="s4" style="--tc:var(--c1)"><h2>4. Akış Diyagramı Şekilleri</h2><div class="body">
+<p>Temel şekilleri ve görevlerini öğrenmek için dokun:</p>
+<div class="shapes" id="shapes"></div><div class="say" id="shsay"></div></div></section>
+
+<section class="card" id="s5" style="--tc:var(--c2)"><h2>5. Bazı Klavye Kısayolları</h2><div class="body">
+<p>Kısayollarla işlerin daha hızlı ve kolay olmasını sağlar. Kartı çevir 👇</p>
+<div class="cards" id="short"></div></div></section>
+
+<section class="card" id="s6" style="--tc:var(--c6)"><h2>6. Bazı Klavye Tuşları Görevleri</h2><div class="body">
+<p>Bu tuşlar klavyede sıkça kullandığımız ve önemli tuşlardır. Dokun ya da gerçek klavyende bas!</p>
+<div class="kbd" id="keys"></div>
+<div class="live"><big id="lk">⌨️ Bir tuşa bas</big><span id="ld">Tuşun görevi burada çıkacak.</span></div></div></section>
+
+<section class="card wide" id="s7" style="--tc:var(--c3)"><h2>7. Mouse (Fare) Tuşları Ne İşe Yarar?</h2><div class="body">
+<p>Aşağıdaki alanları dene: tıkla, çift tıkla, sağ tıkla, tekerleği çevir (telefonda: basılı tut = sağ tık).</p>
+<div class="pad">
+<div class="zone" id="zl"><div class="ic">🖱️</div><h3>1. Sol Tık</h3><p>Öğeyi seçer. Çift tıklama ile açar.</p></div>
+<div class="zone" id="zr"><div class="ic">📋</div><h3>2. Sağ Tık</h3><p>Seçenekler menüsünü açar.</p></div>
+<div class="zone" id="zs"><div class="ic">🎡</div><h3>3. Tekerlek (Scroll)</h3><p>Sayfayı yukarı veya aşağı kaydırır.</p></div>
+</div><div class="say" id="msay"></div></div></section>
+
+<section class="card wide q" id="s8" style="--tc:var(--c5)"><h2>⭐ Çoktan Seçmeli Sınav (10 soru)</h2><div class="body" id="quiz"></div></section>
+
+<section class="card wide" id="s9" style="--tc:var(--c6)"><h2>✍️ Açık Uçlu Sorular (10 soru)</h2><div class="body"><p>Cevabını kendi cümlelerinle yaz, sonra kontrol et. Robi anahtar kelimelere bakıp yorum yapar ve örnek cevabı gösterir.</p><div class="bar"><span id="opt">0 / 10</span><div class="track"><div class="fill" id="opf"></div></div></div><div id="open"></div></div></section>
+</main>
+<p style="text-align:center;color:var(--mute)">Tekrar ederek kendini hazırla! 🚀</p>
+</div>
+<script>
+const $=s=>document.querySelector(s),done=new Set();
+const secs=[["s1","Algoritma","--c4"],["s2","Bilgisayar","--c3"],["s3","Akış","--c5"],["s4","Şekiller","--c1"],["s5","Kısayollar","--c2"],["s6","Tuşlar","--c6"],["s7","Mouse","--c3"],["s8","Sınav","--c5"],["s9","Açık Uçlu","--c6"]];
+$("#nav").innerHTML=secs.map(s=>`<a href="#${s[0]}" style="background:var(${s[2]})">${s[1]}</a>`).join("");
+const bub=t=>$("#bub").textContent=t;
+function mark(n){done.add(n);$("#pt").textContent=done.size+" / 7";$("#fill").style.width=done.size/7*100+"%";if(done.size==7)bub("Harikasın! Tüm bölümleri tamamladın! 🎉")}
+const talk=["Kodlamak adım adım düşünmektir!","Algoritma = sıralı adımlar.","Oval başlar, oval bitirir!","Ctrl + S ile sık sık kaydet!","Sınavda bol şans! ⭐"];let ti=0;
+$("#robot").onclick=()=>bub(talk[ti++%talk.length]);
+$("#theme").onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).getPropertyValue("--bg").trim()==="#0f1730";r.dataset.theme=d?"light":"dark"};
+// 1
+const steps=["Oyunu aç.","Başla butonuna tıkla.","Oyunu oyna."];let ns=0;
+$("#algo").innerHTML=steps.map((t,i)=>`<li><button aria-pressed="false"><i>${i+1}</i>${t}</button></li>`).join("");
+document.querySelectorAll("#algo button").forEach((b,i)=>b.onclick=()=>{
+ if(i!==ns){$("#algosay").textContent="Sıra önemli! Önce "+(ns+1)+". adımı yap.";return}
+ b.setAttribute("aria-pressed","true");ns++;$("#algosay").textContent=ns==3?"Tebrikler, algoritma tamam! ✅":"Güzel, sıradaki adıma geç.";if(ns==3)mark(1)});
+// 2
+const uses=[["📚 Bilgi araştırmak","İnternette araştırma yaparız."],["✍️ Yazı yazmak","Ödev ve hikâye yazarız."],["🧮 Hesaplama yapmak","Çok hızlı işlem yapar."],["🎮 Oyun oynamak","Eğlenirken öğreniriz."],["🎬 Resim ve video hazırlamak","Çizer, düzenler, film yaparız."]];
+const pcs=new Set();
+$("#pc").innerHTML=uses.map(u=>`<button class="chip" aria-pressed="false">${u[0]}</button>`).join("");
+document.querySelectorAll("#pc .chip").forEach((b,i)=>b.onclick=()=>{b.setAttribute("aria-pressed","true");$("#pcsay").textContent=uses[i][1];pcs.add(i);if(pcs.size==5)mark(2)});
+// 3
+$("#play").onclick=()=>{const f=[...document.querySelectorAll("#flow .f")];f.forEach(x=>x.style.fill="");f.forEach((x,i)=>setTimeout(()=>{x.style.fill="var(--c3)";if(i==3)mark(3)},i*600))};
+// 4
+const sh=[["Başlangıç / Bitiş","Oval","Algoritmanın başladığı ve bittiği yer.",'<rect x="8" y="14" width="104" height="38" rx="19"/>'],["İşlem","Dikdörtgen","Yapılan işlem adımı.",'<rect x="14" y="12" width="92" height="42"/>'],["Girdi / Çıktı","Paralelkenar","Veri girişi veya sonuç gösterme.",'<path d="M30 12h80l-20 42H10z"/>'],["Karar","Eşkenar dörtgen","Evet / Hayır sorusu sorulan yer.",'<path d="M60 6l50 27-50 27-50-27z"/>'],["Yön","Ok","Adımların sırasını gösterir.",'<path d="M10 33h92M80 15l22 18-22 18" style="fill:none"/>']];
+const shs=new Set();
+$("#shapes").innerHTML=sh.map(s=>`<button class="shape"><b>${s[0]}</b><svg viewBox="0 0 120 66">${s[3]}</svg><small>(${s[1]})</small></button>`).join("");
+document.querySelectorAll(".shape").forEach((b,i)=>b.onclick=()=>{document.querySelectorAll(".shape").forEach(x=>x.classList.remove("on"));b.classList.add("on");$("#shsay").textContent=sh[i][0]+": "+sh[i][2];shs.add(i);if(shs.size==5)mark(4)});
+// 5
+const sc=[["Ctrl + C","Kopyala"],["Ctrl + V","Yapıştır"],["Ctrl + Z","Bir adım geri al"],["Ctrl + A","Tümünü seç"],["Ctrl + S","Kaydet"]],scs=new Set();
+$("#short").innerHTML=sc.map(s=>`<button class="flip"><span><em>${s[0]}</em><strong>${s[1]}</strong></span></button>`).join("");
+document.querySelectorAll(".flip").forEach((b,i)=>b.onclick=()=>{b.classList.toggle("f");scs.add(i);if(scs.size==5)mark(5)});
+// 6
+const ks=[["Enter","Alt satıra geçer veya işlemi onaylar.","Enter"],["Space","Kelimeler arasında boşluk bırakır."," "],["Backspace","İmlecin solundaki karakteri siler.","Backspace"],["Delete","İmlecin sağındaki karakteri siler.","Delete"],["Shift","Büyük harf yazdırır.","Shift"],["Caps Lock","Büyük harf modunu açar/kapatır.","CapsLock"],["Tab","Satır başı yapar, sonraki alana geçer, kodda girinti sağlar.","Tab"],["Esc","İptal eder, menüden çıkar.","Escape"],["Alt","Farklı komutlar çalıştırır.","Alt"]],kss=new Set();
+$("#keys").innerHTML=ks.map(k=>`<button class="key"><b>${k[0]}</b><span>${k[1]}</span></button>`).join("");
+function showKey(i){document.querySelectorAll(".key")[i].classList.add("on");$("#lk").textContent=ks[i][0];$("#ld").textContent=ks[i][1];kss.add(i);if(kss.size==ks.length)mark(6)}
+document.querySelectorAll(".key").forEach((b,i)=>b.onclick=()=>showKey(i));
+addEventListener("keydown",e=>{const i=ks.findIndex(k=>k[2]===e.key);if(i>-1){if(["Tab","Alt"," "].includes(e.key)&&!e.target.closest(".key"))e.preventDefault();showKey(i)}});
+// 7
+const ms=new Set(),hit=(el,t,n)=>{el.classList.add("hit");setTimeout(()=>el.classList.remove("hit"),180);$("#msay").textContent=t;ms.add(n);if(ms.size==3)mark(7)};
+$("#zl").onclick=e=>hit($("#zl"),"Sol tık: öğeyi seçtin!","l");
+$("#zl").ondblclick=()=>hit($("#zl"),"Çift tıklama: öğeyi açtın!","l");
+$("#zr").oncontextmenu=e=>{e.preventDefault();hit($("#zr"),"Sağ tık: seçenekler menüsü açıldı! 📋","r")};
+$("#zs").onwheel=e=>{e.preventDefault();hit($("#zs"),e.deltaY>0?"Sayfa aşağı kaydı ⬇️":"Sayfa yukarı kaydı ⬆️","s")};
+$("#zs").onclick=()=>hit($("#zs"),"Tekerlek: kaydırma yapar. Bu alanda çevirmeyi dene!","s");
+// quiz
+const Q=[["Bir problemi çözmek için izlenen sıralı adımlara ne denir?",["Algoritma","Klavye","Fare"],0],["Akış diyagramında başlangıç ve bitiş hangi şekille gösterilir?",["Dikdörtgen","Oval","Ok"],1],["Karar şekli hangisidir?",["Eşkenar dörtgen","Paralelkenar","Oval"],0],["Kopyalamak için hangi kısayol kullanılır?",["Ctrl + V","Ctrl + S","Ctrl + C"],2],["İmlecin solundaki karakteri hangi tuş siler?",["Delete","Backspace","Enter"],1],["Seçenekler menüsünü hangi fare tuşu açar?",["Sol tık","Sağ tık","Tekerlek"],1],["Hangisi bir algoritma örneğidir?",["Oyunu aç → Başla'ya tıkla → Oyunu oyna","Mouse ve klavye","Ekran ve hoparlör"],0],["Ctrl + Z kısayolu ne yapar?",["Kaydeder","Bir adım geri alır","Tümünü seçer"],1],["Girdi / Çıktı hangi şekille gösterilir?",["Paralelkenar","Oval","Ok"],0],["Büyük harf modunu açıp kapatan tuş hangisidir?",["Shift","Tab","Caps Lock"],2]];
+let qi=0,sco=0;
+function ask(){const q=Q[qi];$("#quiz").innerHTML=`<h3>Soru ${qi+1}/${Q.length}: ${q[0]}</h3><div class="opts">${q[1].map((o,i)=>`<button>${o}</button>`).join("")}</div><div class="qf"><span id="fb">Cevabını seç.</span><button class="btn" id="nx" disabled>${qi==Q.length-1?"Bitir":"Sonraki"}</button></div>`;
+ const bs=document.querySelectorAll(".opts button");
+ bs.forEach((b,i)=>b.onclick=()=>{bs.forEach(x=>x.disabled=true);bs[q[2]].classList.add("ok");if(i==q[2]){sco++;$("#fb").textContent="Doğru! 🎉"}else{b.classList.add("no");$("#fb").textContent="Doğru cevap: "+q[1][q[2]]}$("#nx").disabled=false});
+ $("#nx").onclick=()=>{qi++;qi<Q.length?ask():finish()}}
+function finish(){$("#quiz").innerHTML=`<div class="end">${sco>=8?"🏆 Süpersin!":sco>=5?"👏 İyi iş!":"💪 Biraz daha tekrar!"}<br>${sco} / ${Q.length} doğru<br><button class="btn" id="again">Tekrar dene</button></div>`;$("#again").onclick=()=>{qi=0;sco=0;ask()};bub("Sınav bitti: "+sco+"/"+Q.length+" ⭐")}
+// açık uçlu
+const O=[
+["Algoritma nedir? Kendi cümlelerinle anlat.","Algoritma, bir problemi çözmek veya bir işi yapmak için izlenen sıralı adımlardır.",["problem","adım","sıra"]],
+["Günlük hayattan bir algoritma örneği ver ve adımlarını yaz.","Diş fırçalama: 1. Fırçaya macun sür. 2. Dişlerini fırçala. 3. Ağzını çalkala. Adımlar sırayla ve eksiksiz yazılmalıdır.",["1","2","önce","sonra","sırayla","adım"]],
+["Bilgisayar nedir ve ne işe yarar?","Bilgisayar; verileri alan, işleyen, saklayan ve sonuçları kullanıcıya sunan elektronik bir cihazdır. Bilgi araştırmak, yazı yazmak, hesap yapmak, oyun oynamak ve resim-video hazırlamak için kullanılır.",["veri","işle","sakla","sonuç","elektronik"]],
+["Akış diyagramı neden kullanılır? Bize ne kazandırır?","Akış diyagramı, algoritmayı şekiller ve oklarla gösterir. İşlem adımlarını görsel olarak anlamamızı ve takip etmemizi kolaylaştırır.",["görsel","anla","takip","şekil","ok"]],
+["Karar şekli nedir? Ne zaman kullanılır?","Karar şekli eşkenar dörtgendir. Evet/Hayır gibi bir soru sorulduğunda ve cevaba göre farklı yola gidileceği zaman kullanılır.",["eşkenar","dörtgen","evet","hayır","soru","karar"]],
+["Başlangıç/Bitiş şekli ile İşlem şekli arasındaki fark nedir?","Başlangıç/Bitiş şekli ovaldir ve akışın nerede başlayıp bittiğini gösterir. İşlem şekli dikdörtgendir ve yapılan işlemi gösterir.",["oval","dikdörtgen","başla","bit","işlem"]],
+["Klavye kısayolları işlerimizi neden kolaylaştırır?","Kısayollar, menülerde arama yapmadan işlemleri tek hamlede yapmamızı sağlar. Böylece zaman kazanır, işlerimizi daha hızlı ve kolay yaparız.",["hızlı","kolay","kısayol","zaman"]],
+["Bir metni başka yere taşımak için hangi kısayolları, hangi sırayla kullanırsın?","Önce metni seçeriz, Ctrl + C ile kopyalarız, sonra yeni yere gidip Ctrl + V ile yapıştırırız.",["seç","kopyala","yapıştır","ctrl"]],
+["Backspace ile Delete tuşu arasındaki fark nedir?","Backspace imlecin solundaki karakteri siler. Delete ise imlecin sağındaki karakteri siler.",["sol","sağ","imleç","sil"]],
+["Mouse'un sol tuşu, sağ tuşu ve tekerleği ne işe yarar? Farklarını anlat.","Sol tık öğeyi seçer, çift tıklama açar. Sağ tık seçenekler menüsünü açar. Tekerlek sayfayı yukarı veya aşağı kaydırır.",["seç","çift","menü","kaydır","sayfa"]]];
+const od=new Set();
+$("#open").innerHTML=O.map((o,i)=>`<div class="oq"><h3>${i+1}. ${o[0]}</h3><textarea rows="3" placeholder="Cevabını buraya yaz…" aria-label="Cevap ${i+1}"></textarea><button class="btn">Cevabımı kontrol et</button><div class="cm" hidden></div></div>`).join("");
+document.querySelectorAll(".oq").forEach((el,i)=>{const o=O[i],ta=el.querySelector("textarea"),cm=el.querySelector(".cm");
+ el.querySelector(".btn").onclick=()=>{const raw=ta.value.trim(),t=raw.toLocaleLowerCase("tr");cm.hidden=false;
+  if(raw.length<10){cm.innerHTML="✏️ Önce cevabını yaz. En az bir cümle olsun.";return}
+  const f=o[2].filter(k=>t.includes(k)),m=o[2].filter(k=>!t.includes(k)),r=f.length/o[2].length;
+  const v=r>=.6?"🌟 Harika! Önemli noktaların çoğuna değinmişsin.":r>0?"👍 İyi başlangıç! Bazı önemli noktalar eksik.":"🤔 Henüz anahtar noktalara değinmemişsin. Örnek cevaba bak ve tekrar dene.";
+  cm.innerHTML=`<b>${v}</b><br>${f.map(k=>`<span class="tag y">✓ ${k}</span>`).join("")}${m.length?`<br>💡 Şunlara da değinebilirsin: ${m.map(k=>`<span class="tag">${k}</span>`).join("")}`:""}<br><b>Örnek cevap:</b> ${o[1]}`;
+  od.add(i);$("#opt").textContent=od.size+" / 10";$("#opf").style.width=od.size*10+"%";if(od.size==10)bub("Tüm açık uçlu soruları cevapladın! 🌟")}});
+ask();
+</script>
+</body>
+</html>
